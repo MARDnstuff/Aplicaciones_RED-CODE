@@ -4,8 +4,15 @@
  * and open the template in the editor.
  */
 package com.mycompany.drive;
-
 import java.awt.Color;
+import java.awt.Container;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+
 
 /**
  *
@@ -32,7 +39,7 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         background = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        localFilesPanel = new javax.swing.JPanel();
+        Home = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         remoteFilesPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -48,8 +55,13 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         deleteDirPanel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
+        localFilesPanel2 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        OnlineB = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        FilesView = new javax.swing.JScrollPane();
+        Tree1 = new javax.swing.JTree();
 
         jLabel1.setText("jLabel1");
 
@@ -62,43 +74,50 @@ public class controlFrame extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(102, 102, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        localFilesPanel.setBackground(new java.awt.Color(102, 102, 255));
-        localFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        localFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        Home.setBackground(new java.awt.Color(102, 102, 255));
+        Home.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Home.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                HomeMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                localFilesPanelMouseEntered(evt);
+                HomeMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                localFilesPanelMouseExited(evt);
+                HomeMouseExited(evt);
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Archivos Locales");
+        jLabel3.setText("Inicio");
 
-        javax.swing.GroupLayout localFilesPanelLayout = new javax.swing.GroupLayout(localFilesPanel);
-        localFilesPanel.setLayout(localFilesPanelLayout);
-        localFilesPanelLayout.setHorizontalGroup(
-            localFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(localFilesPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout HomeLayout = new javax.swing.GroupLayout(Home);
+        Home.setLayout(HomeLayout);
+        HomeLayout.setHorizontalGroup(
+            HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(HomeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
-        localFilesPanelLayout.setVerticalGroup(
-            localFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(localFilesPanelLayout.createSequentialGroup()
+        HomeLayout.setVerticalGroup(
+            HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(HomeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(localFilesPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 160, 40));
+        jPanel1.add(Home, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 160, 40));
 
         remoteFilesPanel.setBackground(new java.awt.Color(102, 102, 255));
         remoteFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         remoteFilesPanel.setPreferredSize(new java.awt.Dimension(200, 50));
         remoteFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                remoteFilesPanelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 remoteFilesPanelMouseEntered(evt);
             }
@@ -327,12 +346,66 @@ public class controlFrame extends javax.swing.JFrame {
 
         jPanel1.add(deleteDirPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 160, 40));
 
+        localFilesPanel2.setBackground(new java.awt.Color(102, 102, 255));
+        localFilesPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        localFilesPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                localFilesPanel2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                localFilesPanel2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                localFilesPanel2MouseExited(evt);
+            }
+        });
+
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Archivos Locales");
+
+        javax.swing.GroupLayout localFilesPanel2Layout = new javax.swing.GroupLayout(localFilesPanel2);
+        localFilesPanel2.setLayout(localFilesPanel2Layout);
+        localFilesPanel2Layout.setHorizontalGroup(
+            localFilesPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(localFilesPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addContainerGap(71, Short.MAX_VALUE))
+        );
+        localFilesPanel2Layout.setVerticalGroup(
+            localFilesPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(localFilesPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(localFilesPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 160, 40));
+
+        OnlineB.setText("Online");
+        OnlineB.setToolTipText("");
+        OnlineB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OnlineBMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                OnlineBMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                OnlineBMouseExited(evt);
+            }
+        });
+        jPanel1.add(OnlineB, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
+
         background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 470));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel2.setText("Sistema de almacenamiento");
+        jLabel2.setText("Sistema de Almacenamiento");
+
+        FilesView.setForeground(new java.awt.Color(240, 240, 240));
+        FilesView.setViewportView(Tree1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -341,14 +414,20 @@ public class controlFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(172, 172, 172)
                 .addComponent(jLabel2)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(FilesView)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
-                .addContainerGap(422, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(FilesView, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         background.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 520, 470));
@@ -368,14 +447,6 @@ public class controlFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void localFilesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanelMouseEntered
-        localFilesPanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_localFilesPanelMouseEntered
-
-    private void localFilesPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanelMouseExited
-        localFilesPanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_localFilesPanelMouseExited
 
     private void remoteFilesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseEntered
         remoteFilesPanel.setBackground(new Color(51,0,204));
@@ -432,6 +503,91 @@ public class controlFrame extends javax.swing.JFrame {
     private void deleteDirPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteDirPanelMouseExited
         deleteDirPanel.setBackground(new Color(102,102,255));
     }//GEN-LAST:event_deleteDirPanelMouseExited
+
+    private void HomeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseExited
+        Home.setBackground(new Color(102,102,255));
+    }//GEN-LAST:event_HomeMouseExited
+
+    private void HomeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseEntered
+        Home.setBackground(new Color(51,0,204));
+    }//GEN-LAST:event_HomeMouseEntered
+
+    private void HomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseClicked
+        // TODO add your handling code here:
+        FilesView.setVisible(false);
+    }//GEN-LAST:event_HomeMouseClicked
+
+    private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
+        // TODO add your handling code here:
+        FilesView.setVisible(true);
+        String Udir = "C:\\Users\\reyma\\Desktop\\ALBERTO";//Dirección se debe cambiar a la se usuario
+//        UserCloud obj = new UserCloud();
+//        JTree obj2 = new JTree (obj.MyFiles(Udir));
+//        Tree1.setModel(obj2.getModel());
+        System.out.println("remote");
+        //CONEXION
+        try {
+            int pto = 1025;
+            Socket cl = new Socket("localhost", pto);
+            System.out.println("Conexion con servidor exitosa.. preparado para recibir objeto..");
+            
+            //INICIO DE CONFIGURACIÓN PARA RECIBIR OBJETO
+            ObjectOutputStream oos = new ObjectOutputStream(cl.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(cl.getInputStream());
+            //Recepcion de objeto
+            Objeto ob2 = (Objeto) ois.readObject();
+            System.out.println("Objeto recibido desde " + cl.getInetAddress() + ":" + cl.getPort() + " con los datos:");
+            System.out.println("Flag:" + ob2.getX());
+            JTree arbol = new JTree(ob2.getTree());
+            Tree1.setModel(arbol.getModel());
+            //Envio de datos de confirmación
+            Objeto ob = new Objeto(0,ob2.getTree());
+            System.out.println("Enviando objeto con Flag: " + ob.getX());
+            oos.writeObject(ob);
+            oos.flush();
+            System.out.println("Objeto enviado..");
+            ois.close();
+            oos.close();
+            cl.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_remoteFilesPanelMouseClicked
+
+    private void localFilesPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseClicked
+        // TODO add your handling code here:
+        FilesView.setVisible(true);
+        String Udir = "C:\\Users\\reyma\\Desktop\\MARCO";//Dirección se debe cambiar a la se usuario
+        UserCloud obj = new UserCloud();
+        JTree obj2 = new JTree (obj.MyFiles(Udir));
+        Tree1.setModel(obj2.getModel());
+        System.out.println("local");
+    }//GEN-LAST:event_localFilesPanel2MouseClicked
+
+    private void localFilesPanel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseEntered
+        // TODO add your handling code here:
+         localFilesPanel2.setBackground(new Color(51,0,204));
+    }//GEN-LAST:event_localFilesPanel2MouseEntered
+
+    private void localFilesPanel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseExited
+        // TODO add your handling code here:
+        localFilesPanel2.setBackground(new Color(102,102,255));
+    }//GEN-LAST:event_localFilesPanel2MouseExited
+
+    private void OnlineBMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseEntered
+        // TODO add your handling code here:
+        //OnlineB.setBackground(new Color(0,255,0));
+    }//GEN-LAST:event_OnlineBMouseEntered
+
+    private void OnlineBMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseExited
+        // TODO add your handling code here:
+        //OnlineB.setBackground(new Color(240,240,240));
+    }//GEN-LAST:event_OnlineBMouseExited
+
+    private void OnlineBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseClicked
+        // TODO add your handling code here:
+        OnlineB.setBackground(new Color(0,255,0));
+    }//GEN-LAST:event_OnlineBMouseClicked
     
     /**
      * @param args the command line arguments
@@ -469,6 +625,10 @@ public class controlFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane FilesView;
+    private javax.swing.JPanel Home;
+    private javax.swing.JToggleButton OnlineB;
+    private javax.swing.JTree Tree1;
     private javax.swing.JPanel background;
     private javax.swing.JPanel deleteDirPanel;
     private javax.swing.JPanel deleteFilePanel;
@@ -476,6 +636,7 @@ public class controlFrame extends javax.swing.JFrame {
     private javax.swing.JPanel downloadFilePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -486,7 +647,7 @@ public class controlFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel localFilesPanel;
+    private javax.swing.JPanel localFilesPanel2;
     private javax.swing.JPanel remoteFilesPanel;
     private javax.swing.JPanel uploadDirPanel;
     private javax.swing.JPanel uploadFilePanel;
