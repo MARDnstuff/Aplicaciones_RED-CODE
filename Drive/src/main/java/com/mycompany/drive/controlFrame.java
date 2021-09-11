@@ -12,6 +12,7 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 
 /**
@@ -19,7 +20,7 @@ import javax.swing.JTree;
  * @author Mauricio
  */
 public class controlFrame extends javax.swing.JFrame {
-
+    public String x = "not selected";
     /**
      * Creates new form controlFrame
      */
@@ -405,6 +406,12 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel2.setText("Sistema de Almacenamiento");
 
         FilesView.setForeground(new java.awt.Color(240, 240, 240));
+
+        Tree1.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                Tree1ValueChanged(evt);
+            }
+        });
         FilesView.setViewportView(Tree1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -520,7 +527,7 @@ public class controlFrame extends javax.swing.JFrame {
     private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
         // TODO add your handling code here:
         FilesView.setVisible(true);
-        String Udir = "C:\\Users\\reyma\\Desktop\\ALBERTO";//Dirección se debe cambiar a la se usuario
+       // String Udir = "C:\\Users\\reyma\\Desktop\\ALBERTO";//Dirección se debe cambiar a la se usuario
 //        UserCloud obj = new UserCloud();
 //        JTree obj2 = new JTree (obj.MyFiles(Udir));
 //        Tree1.setModel(obj2.getModel());
@@ -587,7 +594,15 @@ public class controlFrame extends javax.swing.JFrame {
     private void OnlineBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseClicked
         // TODO add your handling code here:
         OnlineB.setBackground(new Color(0,255,0));
+        System.out.println(x);
     }//GEN-LAST:event_OnlineBMouseClicked
+
+    private void Tree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_Tree1ValueChanged
+        // TODO add your handling code here:
+      x =  Tree1.getSelectionPath().getLastPathComponent().toString();
+      System.out.println(x);
+      
+    }//GEN-LAST:event_Tree1ValueChanged
     
     /**
      * @param args the command line arguments
