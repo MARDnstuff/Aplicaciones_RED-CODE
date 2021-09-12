@@ -48,18 +48,6 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         remoteFilesPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        uploadFilePanel = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        uploadDirPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        downloadFilePanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        downloadDirPanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        deleteFilePanel = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        deleteDirPanel = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
         localFilesPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -71,12 +59,16 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         deleteLocalBTN = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
+        uploadMulFilesPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         remoteButtonsPanel = new javax.swing.JPanel();
         downloadBTN = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         deleteRemoteBTN = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
+        downloadMulFilesPanel = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
         loadingLabel = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
@@ -164,204 +156,6 @@ public class controlFrame extends javax.swing.JFrame {
 
         jPanel1.add(remoteFilesPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 160, 40));
 
-        uploadFilePanel.setBackground(new java.awt.Color(102, 102, 255));
-        uploadFilePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        uploadFilePanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                uploadFilePanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                uploadFilePanelMouseExited(evt);
-            }
-        });
-
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Subir archivo");
-
-        javax.swing.GroupLayout uploadFilePanelLayout = new javax.swing.GroupLayout(uploadFilePanel);
-        uploadFilePanel.setLayout(uploadFilePanelLayout);
-        uploadFilePanelLayout.setHorizontalGroup(
-            uploadFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(uploadFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addContainerGap(88, Short.MAX_VALUE))
-        );
-        uploadFilePanelLayout.setVerticalGroup(
-            uploadFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(uploadFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(uploadFilePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 160, 40));
-
-        uploadDirPanel.setBackground(new java.awt.Color(102, 102, 255));
-        uploadDirPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        uploadDirPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                uploadDirPanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                uploadDirPanelMouseExited(evt);
-            }
-        });
-
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Subir carpeta");
-
-        javax.swing.GroupLayout uploadDirPanelLayout = new javax.swing.GroupLayout(uploadDirPanel);
-        uploadDirPanel.setLayout(uploadDirPanelLayout);
-        uploadDirPanelLayout.setHorizontalGroup(
-            uploadDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(uploadDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(86, Short.MAX_VALUE))
-        );
-        uploadDirPanelLayout.setVerticalGroup(
-            uploadDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(uploadDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(uploadDirPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 160, 40));
-
-        downloadFilePanel.setBackground(new java.awt.Color(102, 102, 255));
-        downloadFilePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        downloadFilePanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                downloadFilePanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                downloadFilePanelMouseExited(evt);
-            }
-        });
-
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Descargar archivo");
-
-        javax.swing.GroupLayout downloadFilePanelLayout = new javax.swing.GroupLayout(downloadFilePanel);
-        downloadFilePanel.setLayout(downloadFilePanelLayout);
-        downloadFilePanelLayout.setHorizontalGroup(
-            downloadFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(downloadFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addContainerGap(63, Short.MAX_VALUE))
-        );
-        downloadFilePanelLayout.setVerticalGroup(
-            downloadFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(downloadFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(downloadFilePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 160, 40));
-
-        downloadDirPanel.setBackground(new java.awt.Color(102, 102, 255));
-        downloadDirPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        downloadDirPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                downloadDirPanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                downloadDirPanelMouseExited(evt);
-            }
-        });
-
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Descargar carpeta");
-
-        javax.swing.GroupLayout downloadDirPanelLayout = new javax.swing.GroupLayout(downloadDirPanel);
-        downloadDirPanel.setLayout(downloadDirPanelLayout);
-        downloadDirPanelLayout.setHorizontalGroup(
-            downloadDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(downloadDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addContainerGap(61, Short.MAX_VALUE))
-        );
-        downloadDirPanelLayout.setVerticalGroup(
-            downloadDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(downloadDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(downloadDirPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 160, 40));
-
-        deleteFilePanel.setBackground(new java.awt.Color(102, 102, 255));
-        deleteFilePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        deleteFilePanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                deleteFilePanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                deleteFilePanelMouseExited(evt);
-            }
-        });
-
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Eliminar archivo");
-
-        javax.swing.GroupLayout deleteFilePanelLayout = new javax.swing.GroupLayout(deleteFilePanel);
-        deleteFilePanel.setLayout(deleteFilePanelLayout);
-        deleteFilePanelLayout.setHorizontalGroup(
-            deleteFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(deleteFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel9)
-                .addContainerGap(76, Short.MAX_VALUE))
-        );
-        deleteFilePanelLayout.setVerticalGroup(
-            deleteFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(deleteFilePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel9)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(deleteFilePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 160, 40));
-
-        deleteDirPanel.setBackground(new java.awt.Color(102, 102, 255));
-        deleteDirPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        deleteDirPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                deleteDirPanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                deleteDirPanelMouseExited(evt);
-            }
-        });
-
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Eliminar carpeta");
-
-        javax.swing.GroupLayout deleteDirPanelLayout = new javax.swing.GroupLayout(deleteDirPanel);
-        deleteDirPanel.setLayout(deleteDirPanelLayout);
-        deleteDirPanelLayout.setHorizontalGroup(
-            deleteDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(deleteDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10)
-                .addContainerGap(74, Short.MAX_VALUE))
-        );
-        deleteDirPanelLayout.setVerticalGroup(
-            deleteDirPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(deleteDirPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(deleteDirPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 160, 40));
-
         localFilesPanel2.setBackground(new java.awt.Color(102, 102, 255));
         localFilesPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         localFilesPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -403,7 +197,9 @@ public class controlFrame extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         titleLabel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        titleLabel.setText("Sistema de Almacenamiento");
+        titleLabel.setForeground(new java.awt.Color(102, 102, 255));
+        titleLabel.setText("2MCloud");
+        titleLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         FilesView.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(104, 104, 255)));
         FilesView.setForeground(new java.awt.Color(240, 240, 240));
@@ -476,6 +272,33 @@ public class controlFrame extends javax.swing.JFrame {
             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
         );
 
+        uploadMulFilesPanel.setBackground(new java.awt.Color(255, 255, 0));
+        uploadMulFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        uploadMulFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                uploadMulFilesPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                uploadMulFilesPanelMouseExited(evt);
+            }
+        });
+
+        jLabel2.setText("Subir múltiples archivos");
+
+        javax.swing.GroupLayout uploadMulFilesPanelLayout = new javax.swing.GroupLayout(uploadMulFilesPanel);
+        uploadMulFilesPanel.setLayout(uploadMulFilesPanelLayout);
+        uploadMulFilesPanelLayout.setHorizontalGroup(
+            uploadMulFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(uploadMulFilesPanelLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        uploadMulFilesPanelLayout.setVerticalGroup(
+            uploadMulFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout localButtonsPanelLayout = new javax.swing.GroupLayout(localButtonsPanel);
         localButtonsPanel.setLayout(localButtonsPanelLayout);
         localButtonsPanelLayout.setHorizontalGroup(
@@ -483,12 +306,19 @@ public class controlFrame extends javax.swing.JFrame {
             .addGroup(localButtonsPanelLayout.createSequentialGroup()
                 .addComponent(uploadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(uploadMulFilesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         localButtonsPanelLayout.setVerticalGroup(
             localButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uploadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(localButtonsPanelLayout.createSequentialGroup()
+                .addGroup(localButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(uploadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(uploadMulFilesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -561,15 +391,45 @@ public class controlFrame extends javax.swing.JFrame {
             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
         );
 
+        downloadMulFilesPanel.setBackground(new java.awt.Color(255, 255, 0));
+        downloadMulFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        downloadMulFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                downloadMulFilesPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                downloadMulFilesPanelMouseExited(evt);
+            }
+        });
+
+        jLabel16.setText("Descargar múltiples archivos");
+
+        javax.swing.GroupLayout downloadMulFilesPanelLayout = new javax.swing.GroupLayout(downloadMulFilesPanel);
+        downloadMulFilesPanel.setLayout(downloadMulFilesPanelLayout);
+        downloadMulFilesPanelLayout.setHorizontalGroup(
+            downloadMulFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, downloadMulFilesPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
+        );
+        downloadMulFilesPanelLayout.setVerticalGroup(
+            downloadMulFilesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout remoteButtonsPanelLayout = new javax.swing.GroupLayout(remoteButtonsPanel);
         remoteButtonsPanel.setLayout(remoteButtonsPanelLayout);
         remoteButtonsPanelLayout.setHorizontalGroup(
             remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(remoteButtonsPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(downloadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(deleteRemoteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, remoteButtonsPanelLayout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(downloadMulFilesPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, remoteButtonsPanelLayout.createSequentialGroup()
+                        .addComponent(downloadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(deleteRemoteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         remoteButtonsPanelLayout.setVerticalGroup(
             remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -577,7 +437,9 @@ public class controlFrame extends javax.swing.JFrame {
                 .addGroup(remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(downloadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteRemoteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(downloadMulFilesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         loadingLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -591,9 +453,6 @@ public class controlFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(titleLabel))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
@@ -601,33 +460,36 @@ public class controlFrame extends javax.swing.JFrame {
                                     .addComponent(FilesView, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                         .addComponent(localButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(202, 202, 202)
+                                .addGap(205, 205, 205)
                                 .addComponent(loadingLabel)))
                         .addGap(314, 314, 314)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(211, 211, 211)
+                        .addComponent(titleLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(347, 347, 347)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
                         .addComponent(titleLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(FilesView, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(FilesView, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(localButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(loadingLabel)))
+                        .addComponent(loadingLabel))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(347, 347, 347)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -655,54 +517,6 @@ public class controlFrame extends javax.swing.JFrame {
         remoteFilesPanel.setBackground(new Color(102,102,255));
     }//GEN-LAST:event_remoteFilesPanelMouseExited
 
-    private void uploadFilePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadFilePanelMouseEntered
-        uploadFilePanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_uploadFilePanelMouseEntered
-
-    private void uploadFilePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadFilePanelMouseExited
-        uploadFilePanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_uploadFilePanelMouseExited
-
-    private void uploadDirPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadDirPanelMouseEntered
-        uploadDirPanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_uploadDirPanelMouseEntered
-
-    private void uploadDirPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadDirPanelMouseExited
-        uploadDirPanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_uploadDirPanelMouseExited
-
-    private void downloadFilePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadFilePanelMouseEntered
-        downloadFilePanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_downloadFilePanelMouseEntered
-
-    private void downloadFilePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadFilePanelMouseExited
-        downloadFilePanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_downloadFilePanelMouseExited
-
-    private void downloadDirPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadDirPanelMouseEntered
-        downloadDirPanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_downloadDirPanelMouseEntered
-
-    private void downloadDirPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadDirPanelMouseExited
-        downloadDirPanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_downloadDirPanelMouseExited
-
-    private void deleteFilePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteFilePanelMouseEntered
-        deleteFilePanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_deleteFilePanelMouseEntered
-
-    private void deleteFilePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteFilePanelMouseExited
-        deleteFilePanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_deleteFilePanelMouseExited
-
-    private void deleteDirPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteDirPanelMouseEntered
-        deleteDirPanel.setBackground(new Color(51,0,204));
-    }//GEN-LAST:event_deleteDirPanelMouseEntered
-
-    private void deleteDirPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteDirPanelMouseExited
-        deleteDirPanel.setBackground(new Color(102,102,255));
-    }//GEN-LAST:event_deleteDirPanelMouseExited
-
     private void HomeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseExited
         Home.setBackground(new Color(102,102,255));
     }//GEN-LAST:event_HomeMouseExited
@@ -713,6 +527,8 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void HomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseClicked
         // TODO add your handling code here:
+        titleLabel.setText("2MCloud");
+        titleLabel.setForeground(Color.blue);
         remoteButtonsPanel.setVisible(false);
         localButtonsPanel.setVisible(false);
         FilesView.setVisible(false);
@@ -721,6 +537,8 @@ public class controlFrame extends javax.swing.JFrame {
     private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
         // TODO add your handling code here:
         titleLabel.setText("Archivos remotos");
+        loadingLabel.setForeground(Color.green);
+        loadingLabel.setText("Descarga archivos");
         FilesView.setVisible(true);
         localButtonsPanel.setVisible(false);
         remoteButtonsPanel.setVisible(true);
@@ -762,6 +580,8 @@ public class controlFrame extends javax.swing.JFrame {
     private void localFilesPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseClicked
         // TODO add your handling code here:
         titleLabel.setText("Archivos Locales");
+        loadingLabel.setForeground(Color.green);
+        loadingLabel.setText("Sube tus archivos");
         FilesView.setVisible(true);
         localButtonsPanel.setVisible(true);
         remoteButtonsPanel.setVisible(false);
@@ -826,6 +646,7 @@ public class controlFrame extends javax.swing.JFrame {
 
         //Checking if the user has selected a file or a directory
         if(selElement.equals("not selected") || selElement == null){
+           loadingLabel.setForeground(Color.red);
            loadingLabel.setText("Selecciona un archivo o carpeta");
         }
         else{
@@ -924,6 +745,22 @@ public class controlFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_uploadBTNMouseClicked
+
+    private void uploadMulFilesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadMulFilesPanelMouseEntered
+        uploadMulFilesPanel.setBackground(new Color(255,204,0));
+    }//GEN-LAST:event_uploadMulFilesPanelMouseEntered
+
+    private void uploadMulFilesPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadMulFilesPanelMouseExited
+        uploadMulFilesPanel.setBackground(new Color(255,255,0));
+    }//GEN-LAST:event_uploadMulFilesPanelMouseExited
+
+    private void downloadMulFilesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadMulFilesPanelMouseEntered
+        downloadMulFilesPanel.setBackground(new Color(255,204,0));
+    }//GEN-LAST:event_downloadMulFilesPanelMouseEntered
+
+    private void downloadMulFilesPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadMulFilesPanelMouseExited
+        downloadMulFilesPanel.setBackground(new Color(255,255,0));
+    }//GEN-LAST:event_downloadMulFilesPanelMouseExited
     
     /**
      * @param args the command line arguments
@@ -965,27 +802,20 @@ public class controlFrame extends javax.swing.JFrame {
     private javax.swing.JPanel Home;
     private javax.swing.JTree Tree1;
     private javax.swing.JPanel background;
-    private javax.swing.JPanel deleteDirPanel;
-    private javax.swing.JPanel deleteFilePanel;
     private javax.swing.JPanel deleteLocalBTN;
     private javax.swing.JPanel deleteRemoteBTN;
     private javax.swing.JPanel downloadBTN;
-    private javax.swing.JPanel downloadDirPanel;
-    private javax.swing.JPanel downloadFilePanel;
+    private javax.swing.JPanel downloadMulFilesPanel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
@@ -996,7 +826,6 @@ public class controlFrame extends javax.swing.JFrame {
     private javax.swing.JPanel remoteFilesPanel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel uploadBTN;
-    private javax.swing.JPanel uploadDirPanel;
-    private javax.swing.JPanel uploadFilePanel;
+    private javax.swing.JPanel uploadMulFilesPanel;
     // End of variables declaration//GEN-END:variables
 }
