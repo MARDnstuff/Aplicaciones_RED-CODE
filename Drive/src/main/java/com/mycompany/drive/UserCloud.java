@@ -43,4 +43,35 @@ public class UserCloud {
         }//for
         return raiz;
     }//MyFiles
+    /*
+    public static void createConnection(){
+        try {
+            int pto = 1025;
+            Socket cl = new Socket("localhost", pto);
+            System.out.println("Conexion con servidor exitosa.. preparado para recibir objeto..");
+            
+            //INICIO DE CONFIGURACIÓN PARA RECIBIR OBJETO
+            ObjectOutputStream oos = new ObjectOutputStream(cl.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(cl.getInputStream());
+            //Recepcion de objeto
+            Objeto ob2 = (Objeto) ois.readObject();
+            System.out.println("Objeto recibido desde " + cl.getInetAddress() + ":" + cl.getPort() + " con los datos:");
+            System.out.println("Flag:" + ob2.getX());
+            JTree arbol = new JTree(ob2.getTree());
+            Tree1.setModel(arbol.getModel());
+            //Envio de datos de confirmación
+            
+            Objeto ob = new Objeto(0,ob2.getTree());
+            System.out.println("Enviando objeto con Flag: " + ob.getX());
+            oos.writeObject(ob);
+            oos.flush();
+            System.out.println("Objeto enviado..");
+            ois.close();
+            oos.close();
+            cl.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    }*/
 }//UserCloud

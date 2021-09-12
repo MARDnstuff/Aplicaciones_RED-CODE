@@ -6,6 +6,10 @@
 package com.mycompany.drive;
 import java.awt.Color;
 import java.awt.Container;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -20,7 +24,7 @@ import javax.swing.tree.TreePath;
  * @author Mauricio
  */
 public class controlFrame extends javax.swing.JFrame {
-    public String x = "not selected";
+    public String selElement = "not selected";
     /**
      * Creates new form controlFrame
      */
@@ -58,11 +62,22 @@ public class controlFrame extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         localFilesPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        OnlineB = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
         FilesView = new javax.swing.JScrollPane();
         Tree1 = new javax.swing.JTree();
+        localButtonsPanel = new javax.swing.JPanel();
+        uploadBTN = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        deleteLocalBTN = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        remoteButtonsPanel = new javax.swing.JPanel();
+        downloadBTN = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        deleteRemoteBTN = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        loadingLabel = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -383,28 +398,14 @@ public class controlFrame extends javax.swing.JFrame {
 
         jPanel1.add(localFilesPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 160, 40));
 
-        OnlineB.setText("Online");
-        OnlineB.setToolTipText("");
-        OnlineB.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                OnlineBMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                OnlineBMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                OnlineBMouseExited(evt);
-            }
-        });
-        jPanel1.add(OnlineB, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
-
         background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 470));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel2.setText("Sistema de Almacenamiento");
+        titleLabel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        titleLabel.setText("Sistema de Almacenamiento");
 
+        FilesView.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(104, 104, 255)));
         FilesView.setForeground(new java.awt.Color(240, 240, 240));
 
         Tree1.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
@@ -414,27 +415,220 @@ public class controlFrame extends javax.swing.JFrame {
         });
         FilesView.setViewportView(Tree1);
 
+        localButtonsPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        uploadBTN.setBackground(new java.awt.Color(0, 204, 0));
+        uploadBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        uploadBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                uploadBTNMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                uploadBTNMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                uploadBTNMouseExited(evt);
+            }
+        });
+
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Subir");
+
+        javax.swing.GroupLayout uploadBTNLayout = new javax.swing.GroupLayout(uploadBTN);
+        uploadBTN.setLayout(uploadBTNLayout);
+        uploadBTNLayout.setHorizontalGroup(
+            uploadBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(uploadBTNLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jLabel11)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        uploadBTNLayout.setVerticalGroup(
+            uploadBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+        );
+
+        deleteLocalBTN.setBackground(new java.awt.Color(255, 0, 0));
+        deleteLocalBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteLocalBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                deleteLocalBTNMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                deleteLocalBTNMouseExited(evt);
+            }
+        });
+
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Eliminar");
+
+        javax.swing.GroupLayout deleteLocalBTNLayout = new javax.swing.GroupLayout(deleteLocalBTN);
+        deleteLocalBTN.setLayout(deleteLocalBTNLayout);
+        deleteLocalBTNLayout.setHorizontalGroup(
+            deleteLocalBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, deleteLocalBTNLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addGap(29, 29, 29))
+        );
+        deleteLocalBTNLayout.setVerticalGroup(
+            deleteLocalBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout localButtonsPanelLayout = new javax.swing.GroupLayout(localButtonsPanel);
+        localButtonsPanel.setLayout(localButtonsPanelLayout);
+        localButtonsPanelLayout.setHorizontalGroup(
+            localButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(localButtonsPanelLayout.createSequentialGroup()
+                .addComponent(uploadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        localButtonsPanelLayout.setVerticalGroup(
+            localButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(uploadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(deleteLocalBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        remoteButtonsPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        downloadBTN.setBackground(new java.awt.Color(0, 204, 0));
+        downloadBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        downloadBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                downloadBTNMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                downloadBTNMouseExited(evt);
+            }
+        });
+
+        jLabel14.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("Descargar");
+
+        javax.swing.GroupLayout downloadBTNLayout = new javax.swing.GroupLayout(downloadBTN);
+        downloadBTN.setLayout(downloadBTNLayout);
+        downloadBTNLayout.setHorizontalGroup(
+            downloadBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(downloadBTNLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel14)
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+        downloadBTNLayout.setVerticalGroup(
+            downloadBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+        );
+
+        deleteRemoteBTN.setBackground(new java.awt.Color(255, 0, 0));
+        deleteRemoteBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteRemoteBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                deleteRemoteBTNMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                deleteRemoteBTNMouseExited(evt);
+            }
+        });
+
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("Eliminar");
+
+        javax.swing.GroupLayout deleteRemoteBTNLayout = new javax.swing.GroupLayout(deleteRemoteBTN);
+        deleteRemoteBTN.setLayout(deleteRemoteBTNLayout);
+        deleteRemoteBTNLayout.setHorizontalGroup(
+            deleteRemoteBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, deleteRemoteBTNLayout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(27, 27, 27))
+        );
+        deleteRemoteBTNLayout.setVerticalGroup(
+            deleteRemoteBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout remoteButtonsPanelLayout = new javax.swing.GroupLayout(remoteButtonsPanel);
+        remoteButtonsPanel.setLayout(remoteButtonsPanelLayout);
+        remoteButtonsPanelLayout.setHorizontalGroup(
+            remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(remoteButtonsPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(downloadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deleteRemoteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        remoteButtonsPanelLayout.setVerticalGroup(
+            remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(remoteButtonsPanelLayout.createSequentialGroup()
+                .addGroup(remoteButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(downloadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteRemoteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 1, Short.MAX_VALUE))
+        );
+
+        loadingLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingLabel.setForeground(new java.awt.Color(51, 204, 0));
+        loadingLabel.setText("Sube tus archivos");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jLabel2)
-                .addContainerGap(170, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(FilesView)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(titleLabel))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(FilesView, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(localButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(202, 202, 202)
+                                .addComponent(loadingLabel)))
+                        .addGap(314, 314, 314)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FilesView, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(347, 347, 347)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(FilesView, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(localButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(loadingLabel)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         background.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 520, 470));
@@ -443,9 +637,7 @@ public class controlFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -521,12 +713,17 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void HomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseClicked
         // TODO add your handling code here:
+        remoteButtonsPanel.setVisible(false);
+        localButtonsPanel.setVisible(false);
         FilesView.setVisible(false);
     }//GEN-LAST:event_HomeMouseClicked
 
     private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
         // TODO add your handling code here:
+        titleLabel.setText("Archivos remotos");
         FilesView.setVisible(true);
+        localButtonsPanel.setVisible(false);
+        remoteButtonsPanel.setVisible(true);
        // String Udir = "C:\\Users\\reyma\\Desktop\\ALBERTO";//Dirección se debe cambiar a la se usuario
 //        UserCloud obj = new UserCloud();
 //        JTree obj2 = new JTree (obj.MyFiles(Udir));
@@ -548,12 +745,13 @@ public class controlFrame extends javax.swing.JFrame {
             JTree arbol = new JTree(ob2.getTree());
             Tree1.setModel(arbol.getModel());
             //Envio de datos de confirmación
+            /*
             Objeto ob = new Objeto(0,ob2.getTree());
             System.out.println("Enviando objeto con Flag: " + ob.getX());
             oos.writeObject(ob);
             oos.flush();
             System.out.println("Objeto enviado..");
-            ois.close();
+            ois.close();*/
             oos.close();
             cl.close();
         } catch (Exception e) {
@@ -563,8 +761,11 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void localFilesPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseClicked
         // TODO add your handling code here:
+        titleLabel.setText("Archivos Locales");
         FilesView.setVisible(true);
-        String Udir = "C:\\Users\\reyma\\Desktop\\MARCO";//Dirección se debe cambiar a la se usuario
+        localButtonsPanel.setVisible(true);
+        remoteButtonsPanel.setVisible(false);
+        String Udir = "C:\\Users\\Mauricio\\Documents\\ESCOM\\5semestre\\RedesII\\User_Files";//Dirección se debe cambiar a la se usuario
         UserCloud obj = new UserCloud();
         JTree obj2 = new JTree (obj.MyFiles(Udir));
         Tree1.setModel(obj2.getModel());
@@ -581,28 +782,148 @@ public class controlFrame extends javax.swing.JFrame {
         localFilesPanel2.setBackground(new Color(102,102,255));
     }//GEN-LAST:event_localFilesPanel2MouseExited
 
-    private void OnlineBMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseEntered
-        // TODO add your handling code here:
-        //OnlineB.setBackground(new Color(0,255,0));
-    }//GEN-LAST:event_OnlineBMouseEntered
+    private void uploadBTNMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadBTNMouseExited
+        uploadBTN.setBackground(new Color(0,204,0));
+    }//GEN-LAST:event_uploadBTNMouseExited
 
-    private void OnlineBMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseExited
-        // TODO add your handling code here:
-        //OnlineB.setBackground(new Color(240,240,240));
-    }//GEN-LAST:event_OnlineBMouseExited
-
-    private void OnlineBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OnlineBMouseClicked
-        // TODO add your handling code here:
-        OnlineB.setBackground(new Color(0,255,0));
-        System.out.println(x);
-    }//GEN-LAST:event_OnlineBMouseClicked
+    private void uploadBTNMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadBTNMouseEntered
+        uploadBTN.setBackground(new Color(0,153,51));
+    }//GEN-LAST:event_uploadBTNMouseEntered
 
     private void Tree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_Tree1ValueChanged
         // TODO add your handling code here:
-      x =  Tree1.getSelectionPath().getLastPathComponent().toString();
-      System.out.println(x);
-      
+        if(Tree1.getSelectionPath().getLastPathComponent() != null){
+            selElement =  Tree1.getSelectionPath().getLastPathComponent().toString();
+        }
+        System.out.println(selElement);
     }//GEN-LAST:event_Tree1ValueChanged
+
+    private void deleteLocalBTNMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocalBTNMouseEntered
+        deleteLocalBTN.setBackground(new Color(204,0,0));
+    }//GEN-LAST:event_deleteLocalBTNMouseEntered
+
+    private void deleteLocalBTNMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocalBTNMouseExited
+        deleteLocalBTN.setBackground(new Color(255,0,0));
+    }//GEN-LAST:event_deleteLocalBTNMouseExited
+
+    private void downloadBTNMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadBTNMouseEntered
+        downloadBTN.setBackground(new Color(0,153,51));
+    }//GEN-LAST:event_downloadBTNMouseEntered
+
+    private void downloadBTNMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadBTNMouseExited
+        downloadBTN.setBackground(new Color(0,204,0));
+    }//GEN-LAST:event_downloadBTNMouseExited
+
+    private void deleteRemoteBTNMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteRemoteBTNMouseEntered
+        deleteRemoteBTN.setBackground(new Color(204,0,0));
+    }//GEN-LAST:event_deleteRemoteBTNMouseEntered
+
+    private void deleteRemoteBTNMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteRemoteBTNMouseExited
+        deleteRemoteBTN.setBackground(new Color(255,0,0));
+    }//GEN-LAST:event_deleteRemoteBTNMouseExited
+
+    private void uploadBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadBTNMouseClicked
+
+        //Checking if the user has selected a file or a directory
+        if(selElement.equals("not selected") || selElement == null){
+           loadingLabel.setText("Selecciona un archivo o carpeta");
+        }
+        else{
+            try {
+                //Client for metadata
+                int pto = 1026;
+                Socket clMetadata = new Socket("localhost", pto);
+                System.out.println("Conexion con el servidor exitosa.. Listo para enviar metadatos");
+                DataOutputStream nFilesStream = new DataOutputStream(clMetadata.getOutputStream());
+                                
+                File f = new File(selElement);
+                String dirname = "file";
+                
+                //Checking if the File instance is a file or a directory
+                if(!f.isDirectory()){
+                    nFilesStream.writeInt(1);
+                    nFilesStream.flush();
+                    nFilesStream.writeUTF(dirname);
+                    nFilesStream.flush();
+                    String nombre = f.getName();
+                    String path = f.getAbsolutePath();
+                    long tam = f.length();
+                    System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
+                     //Client for files
+                    Socket clFiles = new Socket("localhost", pto+1);
+                    System.out.println("Conexion con el servidor exitosa.. Listo para enviar archivos..");
+                    DataOutputStream fileOS = new DataOutputStream(clFiles.getOutputStream());
+                    DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
+                    fileOS.writeUTF(nombre);
+                    fileOS.flush();
+                    fileOS.writeLong(tam);
+                    fileOS.flush();
+                    long enviados = 0;
+                    int l=0,porcentaje=0;
+                    while(enviados<tam){
+                        byte[] b = new byte[20000];
+                        l=fileIS.read(b);
+                        loadingLabel.setText("Enviando archivo...("+porcentaje+"%)");
+                        System.out.println("enviados: "+l);
+                        fileOS.write(b,0,l);
+                        fileOS.flush();
+                        enviados = enviados + l;
+                        porcentaje = (int)((enviados*100)/tam);
+                        System.out.print("\rEnviado el "+porcentaje+" % del archivo");
+                    }//while
+                    System.out.println("\nArchivo enviado..");
+                    loadingLabel.setText("Archivo enviado");
+                    fileIS.close();
+                    fileOS.close();
+                    clFiles.close();
+                }
+                //The file is a directory
+                else{
+                    File[] files = f.listFiles();
+                    dirname = f.getName();
+                    nFilesStream.writeInt(files.length);
+                    nFilesStream.flush();
+                    nFilesStream.writeUTF(dirname);
+                    nFilesStream.flush();
+                    for(int i = 0; i < files.length; i++){
+                        String nombre = files[i].getName();
+                        String path = files[i].getAbsolutePath();
+                        long tam = files[i].length();
+                        System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
+                         //Client for files
+                        Socket clFiles = new Socket("localhost", pto+1);
+                        System.out.println("Conexion con el servidor exitosa.. Listo para enviar archivos..");
+                        DataOutputStream fileOS = new DataOutputStream(clFiles.getOutputStream());
+                        DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
+                        fileOS.writeUTF(nombre);
+                        fileOS.flush();
+                        fileOS.writeLong(tam);
+                        fileOS.flush();
+                        long enviados = 0;
+                        int l=0,porcentaje=0;
+                        loadingLabel.setText("Enviando archivo " + (i+1) + "...");
+                        while(enviados<tam){
+                            byte[] b = new byte[1500];
+                            l=fileIS.read(b);
+                            System.out.println("enviados: "+l);
+                            fileOS.write(b,0,l);
+                            fileOS.flush();
+                            enviados = enviados + l;
+                            porcentaje = (int)((enviados*100)/tam);
+                            System.out.print("\rEnviado el "+porcentaje+" % del archivo");
+                        }//while
+                        System.out.println("\nArchivo enviado..");
+                        fileIS.close();
+                        fileOS.close();
+                        clFiles.close();
+                    }
+                    loadingLabel.setText("Carpeta enviada");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_uploadBTNMouseClicked
     
     /**
      * @param args the command line arguments
@@ -642,17 +963,22 @@ public class controlFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane FilesView;
     private javax.swing.JPanel Home;
-    private javax.swing.JToggleButton OnlineB;
     private javax.swing.JTree Tree1;
     private javax.swing.JPanel background;
     private javax.swing.JPanel deleteDirPanel;
     private javax.swing.JPanel deleteFilePanel;
+    private javax.swing.JPanel deleteLocalBTN;
+    private javax.swing.JPanel deleteRemoteBTN;
+    private javax.swing.JPanel downloadBTN;
     private javax.swing.JPanel downloadDirPanel;
     private javax.swing.JPanel downloadFilePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -662,8 +988,14 @@ public class controlFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JLabel loadingLabel;
+    private javax.swing.JPanel localButtonsPanel;
     private javax.swing.JPanel localFilesPanel2;
+    private javax.swing.JPanel remoteButtonsPanel;
     private javax.swing.JPanel remoteFilesPanel;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JPanel uploadBTN;
     private javax.swing.JPanel uploadDirPanel;
     private javax.swing.JPanel uploadFilePanel;
     // End of variables declaration//GEN-END:variables
