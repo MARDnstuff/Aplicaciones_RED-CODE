@@ -1,29 +1,51 @@
 package com.mycompany.drive;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 /**
  *
  * @author reyma
  */
 class Objeto implements Serializable{
+        private static final long serialVersionUID = 6529685098267757690L;
+
 	int x;
         DefaultMutableTreeNode tree_;
+        public List<String> selElements = new ArrayList<String>(); 
 	float y;
         String z;
         Objeto(){
             //Constructor vacio
         }
+        Objeto(List<String> lista_nombres){
+            //Constructor vacio
+            selElements.addAll(lista_nombres);
+            //posible error
+        }
+        
+        Objeto(int nFiles){
+            //Constructor vacio
+            this.x = nFiles;
+        }
+        
         Objeto (int flag_ , DefaultMutableTreeNode obj){
             this.x = flag_;
             this.tree_ = obj;
         }
         
-	Objeto(int x, float y, String z){
-		this.x = x;
-		this.y = y;
+	Objeto(String z){
                 this.z = z;
 	}
-
+        
+    public String getName (int index){
+        return selElements.get(index);
+    }
+    
+    public int getSize_List (){
+        return selElements.size();
+    }
+    
     public int getX() { //Flag de confirmación
         return x;
     }

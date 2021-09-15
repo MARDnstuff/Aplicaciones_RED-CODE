@@ -10,14 +10,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
-
+import java.util.*;  
 
 /**
  *
@@ -25,7 +28,9 @@ import javax.swing.tree.TreePath;
  */
 public class controlFrame extends javax.swing.JFrame {
     public String selElement = "not selected";
-    /**
+    public int sel_No = 0;
+    public List<String> selElements = new ArrayList<String>();  
+    /*
      * Creates new form controlFrame
      */
     public controlFrame() {
@@ -247,6 +252,9 @@ public class controlFrame extends javax.swing.JFrame {
         deleteLocalBTN.setBackground(new java.awt.Color(255, 0, 0));
         deleteLocalBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         deleteLocalBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteLocalBTNMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 deleteLocalBTNMouseEntered(evt);
             }
@@ -275,6 +283,9 @@ public class controlFrame extends javax.swing.JFrame {
         uploadMulFilesPanel.setBackground(new java.awt.Color(255, 255, 0));
         uploadMulFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         uploadMulFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                uploadMulFilesPanelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 uploadMulFilesPanelMouseEntered(evt);
             }
@@ -337,6 +348,9 @@ public class controlFrame extends javax.swing.JFrame {
         downloadBTN.setBackground(new java.awt.Color(0, 204, 0));
         downloadBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         downloadBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                downloadBTNMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 downloadBTNMouseEntered(evt);
             }
@@ -366,6 +380,9 @@ public class controlFrame extends javax.swing.JFrame {
         deleteRemoteBTN.setBackground(new java.awt.Color(255, 0, 0));
         deleteRemoteBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         deleteRemoteBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteRemoteBTNMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 deleteRemoteBTNMouseEntered(evt);
             }
@@ -394,6 +411,9 @@ public class controlFrame extends javax.swing.JFrame {
         downloadMulFilesPanel.setBackground(new java.awt.Color(255, 255, 0));
         downloadMulFilesPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         downloadMulFilesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                downloadMulFilesPanelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 downloadMulFilesPanelMouseEntered(evt);
             }
@@ -536,16 +556,14 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
         // TODO add your handling code here:
+        selElement = "not selected";
+       selElements.clear();
         titleLabel.setText("Archivos remotos");
         loadingLabel.setForeground(Color.green);
         loadingLabel.setText("Descarga archivos");
         FilesView.setVisible(true);
         localButtonsPanel.setVisible(false);
         remoteButtonsPanel.setVisible(true);
-       // String Udir = "C:\\Users\\reyma\\Desktop\\ALBERTO";//Dirección se debe cambiar a la se usuario
-//        UserCloud obj = new UserCloud();
-//        JTree obj2 = new JTree (obj.MyFiles(Udir));
-//        Tree1.setModel(obj2.getModel());
         System.out.println("remote");
         //CONEXION
         try {
@@ -561,15 +579,7 @@ public class controlFrame extends javax.swing.JFrame {
             System.out.println("Objeto recibido desde " + cl.getInetAddress() + ":" + cl.getPort() + " con los datos:");
             System.out.println("Flag:" + ob2.getX());
             JTree arbol = new JTree(ob2.getTree());
-            Tree1.setModel(arbol.getModel());
-            //Envio de datos de confirmación
-            /*
-            Objeto ob = new Objeto(0,ob2.getTree());
-            System.out.println("Enviando objeto con Flag: " + ob.getX());
-            oos.writeObject(ob);
-            oos.flush();
-            System.out.println("Objeto enviado..");
-            ois.close();*/
+            Tree1.setModel(arbol.getModel());       
             oos.close();
             cl.close();
         } catch (Exception e) {
@@ -579,13 +589,15 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void localFilesPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_localFilesPanel2MouseClicked
         // TODO add your handling code here:
+        selElement = "not selected";
+        selElements.clear();
         titleLabel.setText("Archivos Locales");
         loadingLabel.setForeground(Color.green);
         loadingLabel.setText("Sube tus archivos");
         FilesView.setVisible(true);
         localButtonsPanel.setVisible(true);
         remoteButtonsPanel.setVisible(false);
-        String Udir = "C:\\Users\\Mauricio\\Documents\\ESCOM\\5semestre\\RedesII\\User_Files";//Dirección se debe cambiar a la se usuario
+        String Udir = "C:\\Users\\reyma\\Desktop\\MARCO";//Dirección se debe cambiar a la se usuario
         UserCloud obj = new UserCloud();
         JTree obj2 = new JTree (obj.MyFiles(Udir));
         Tree1.setModel(obj2.getModel());
@@ -612,10 +624,22 @@ public class controlFrame extends javax.swing.JFrame {
 
     private void Tree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_Tree1ValueChanged
         // TODO add your handling code here:
-        if(Tree1.getSelectionPath().getLastPathComponent() != null){
+        sel_No = Tree1.getSelectionPaths().length;
+        if(sel_No == 1 ){
             selElement =  Tree1.getSelectionPath().getLastPathComponent().toString();
+            String archivo_1 = Tree1.getSelectionModel().getSelectionPaths()[sel_No-1].getLastPathComponent().toString();
+            selElements.add(archivo_1);
+            System.out.println(selElement);
+        }else{
+            selElement = "not selected";
+            String archivo = Tree1.getSelectionModel().getSelectionPaths()[sel_No-1].getLastPathComponent().toString();
+            selElements.add(archivo);
+            int nFiles = sel_No - 1;
+            System.out.println(selElements.get(nFiles));
         }
-        System.out.println(selElement);
+        System.out.println(sel_No + " archivos seleccionados");     
+        
+        
     }//GEN-LAST:event_Tree1ValueChanged
 
     private void deleteLocalBTNMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocalBTNMouseEntered
@@ -652,7 +676,7 @@ public class controlFrame extends javax.swing.JFrame {
         else{
             try {
                 //Client for metadata
-                int pto = 1026;
+                int pto = 1050;
                 Socket clMetadata = new Socket("localhost", pto);
                 System.out.println("Conexion con el servidor exitosa.. Listo para enviar metadatos");
                 DataOutputStream nFilesStream = new DataOutputStream(clMetadata.getOutputStream());
@@ -662,10 +686,13 @@ public class controlFrame extends javax.swing.JFrame {
                 
                 //Checking if the File instance is a file or a directory
                 if(!f.isDirectory()){
+                    
+                    //Datos de envio para identificacion
                     nFilesStream.writeInt(1);
                     nFilesStream.flush();
                     nFilesStream.writeUTF(dirname);
                     nFilesStream.flush();
+                    
                     String nombre = f.getName();
                     String path = f.getAbsolutePath();
                     long tam = f.length();
@@ -673,16 +700,16 @@ public class controlFrame extends javax.swing.JFrame {
                      //Client for files
                     Socket clFiles = new Socket("localhost", pto+1);
                     System.out.println("Conexion con el servidor exitosa.. Listo para enviar archivos..");
-                    DataOutputStream fileOS = new DataOutputStream(clFiles.getOutputStream());
-                    DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
+                    DataOutputStream fileOS = new DataOutputStream(clFiles.getOutputStream());              
                     fileOS.writeUTF(nombre);
                     fileOS.flush();
                     fileOS.writeLong(tam);
                     fileOS.flush();
+                    DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
                     long enviados = 0;
                     int l=0,porcentaje=0;
                     while(enviados<tam){
-                        byte[] b = new byte[20000];
+                        byte[] b = new byte[2000];
                         l=fileIS.read(b);
                         loadingLabel.setText("Enviando archivo...("+porcentaje+"%)");
                         System.out.println("enviados: "+l);
@@ -695,7 +722,7 @@ public class controlFrame extends javax.swing.JFrame {
                     System.out.println("\nArchivo enviado..");
                     loadingLabel.setText("Archivo enviado");
                     fileIS.close();
-                    fileOS.close();
+                    fileOS.close();                   
                     clFiles.close();
                 }
                 //The file is a directory
@@ -712,7 +739,7 @@ public class controlFrame extends javax.swing.JFrame {
                         long tam = files[i].length();
                         System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
                          //Client for files
-                        Socket clFiles = new Socket("localhost", pto+1);
+                        Socket clFiles = new Socket("localhost", pto+(i+1));
                         System.out.println("Conexion con el servidor exitosa.. Listo para enviar archivos..");
                         DataOutputStream fileOS = new DataOutputStream(clFiles.getOutputStream());
                         DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
@@ -737,7 +764,9 @@ public class controlFrame extends javax.swing.JFrame {
                         fileIS.close();
                         fileOS.close();
                         clFiles.close();
-                    }
+                    }//for
+                    nFilesStream.close();
+                    
                     loadingLabel.setText("Carpeta enviada");
                 }
             } catch (Exception e) {
@@ -761,6 +790,289 @@ public class controlFrame extends javax.swing.JFrame {
     private void downloadMulFilesPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadMulFilesPanelMouseExited
         downloadMulFilesPanel.setBackground(new Color(255,255,0));
     }//GEN-LAST:event_downloadMulFilesPanelMouseExited
+
+    private void downloadBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadBTNMouseClicked
+        // TODO add your handling code here:
+        if(selElement.equals("not selected") || selElement == null){
+           loadingLabel.setForeground(Color.red);
+           loadingLabel.setText("Selecciona un archivo o carpeta");
+        }else{
+            try{
+                //Socket para enviar el nombre del archivo seleccionado
+                int pto = 1030;
+                Socket cl = new Socket("localhost", pto);
+                cl.setReuseAddress(true);
+                System.out.println("Preparando para enviar nombre del archivo ...");
+                //Configuración para envio
+                ObjectOutputStream oos = new ObjectOutputStream(cl.getOutputStream());
+                //Envio de datos de confirmación
+                Objeto ob = new Objeto(selElement);
+                System.out.println("Enviando ruta del archivo seleccionado: " + ob.getZ());
+                oos.writeObject(ob);
+                oos.flush();
+                System.out.println("Objeto enviado..");
+                
+                
+                
+                  //Recibiendo archivos
+                 String dir = "192.168.0.9";
+                 String Udir = "C:\\Users\\reyma\\Desktop\\MARCO\\";
+                 Socket cF = new Socket(dir,pto+1);
+                  System.out.println("Conexion con servidor establecida...");
+                  //////////////////////////
+                  
+                  DataInputStream dis = new DataInputStream(cF.getInputStream());   
+                  int nFiles = dis.readInt(); 
+                  String nombre = dis.readUTF();
+                   System.out.println(nombre + "-->" + nFiles);
+                    if(nFiles > 1){
+                      File newDir = new File(Udir + nombre);
+                      newDir.mkdirs();
+                      newDir.setWritable(true);
+                      System.out.println("Filedir: "+newDir.getAbsolutePath());
+                    }
+                    System.out.println(nFiles);
+                    for(int i=0; i<nFiles;i++){
+                        DataInputStream fileIS = new DataInputStream(cF.getInputStream());
+                        String nm = fileIS.readUTF(); 
+                        long tam = fileIS.readLong();                        
+                        System.out.println("Comienza descarga del archivo "+nm+" de "+tam+" bytes\n\n");
+
+                        DataOutputStream dos;
+                        
+                        if(nFiles > 1){
+                            dos = new DataOutputStream(new FileOutputStream(Udir+nombre+"\\"+nm));
+                        }
+                        else{
+                            dos = new DataOutputStream(new FileOutputStream(Udir+nombre));
+                        }
+                        
+                        long recibidos=0;                
+                        int l=0, porcentaje=0;
+                        while(recibidos<tam){
+                               byte[] b = new byte[1500];
+                               l = dis.read(b);
+                               System.out.println("leidos: "+l);
+                               dos.write(b,0,l);
+                               dos.flush();
+                               recibidos = recibidos + l;
+                               porcentaje = (int)((recibidos*100)/tam);
+                               System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
+                           }//while
+                        System.out.println("Archivo recibido..");
+                        dos.close();                      
+                        
+                        
+                    }
+                
+                
+                cF.close();
+               oos.close();
+                cl.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }//GEN-LAST:event_downloadBTNMouseClicked
+
+    private void uploadMulFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadMulFilesPanelMouseClicked
+        // TODO add your handling code here:
+        try{
+            int pto = 1060;
+            //Iniciamos conexion con servidor
+            String dir = "192.168.0.9";
+            Socket cl = new Socket("localhost",pto);
+            cl.setReuseAddress(true);
+            System.out.println("Conexion con servidor establecida.. lanzando FileChooser..");
+            
+            //Seleccion de archivos multiples
+            JFileChooser jf = new JFileChooser();
+            jf.setMultiSelectionEnabled(true);
+            int r = jf.showOpenDialog(null);
+            
+            //Aprovacion de archivos seleccionados
+            if(r==JFileChooser.APPROVE_OPTION){
+                //Obtenemos los archivos
+                File[] f = jf.getSelectedFiles(); 
+                int nFiles = f.length;//numero de archivos por enviar
+                //Aviso al servidor que recibira n archivos
+                ObjectOutputStream fileOS = new ObjectOutputStream(cl.getOutputStream());
+                Objeto ob = new Objeto(nFiles);
+                System.out.println("Enviando ruta del archivo seleccionado: " + ob.getX());
+                fileOS.writeObject(ob);
+                fileOS.flush();
+                System.out.println("Objeto enviado..");
+                
+                //Proceso de envio de archivos - cambio de flujo
+                
+                for(int i=0; i<nFiles; i++){
+                    Socket cF = new Socket(dir,pto+(i+1));
+                    System.out.println("Conexion establecida con el servidor - ENVIO -->" + nFiles);
+                    String nombre = f[i].getName();
+                    String path = f[i].getAbsolutePath();
+                    long tam = f[i].length();
+                    System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
+                     DataOutputStream dos = new DataOutputStream(cF.getOutputStream());                     
+                     dos.writeUTF(nombre);
+                     dos.flush();
+                     dos.writeLong(tam);
+                     dos.flush();
+                     DataInputStream dis = new DataInputStream(new FileInputStream(path));
+                     long enviados = 0;
+                     int l=0,porcentaje=0;
+                     while(enviados<tam){
+                         byte[] b = new byte[1500];
+                         l=dis.read(b);
+                         System.out.println("enviados: "+l);
+                         dos.write(b,0,l);
+                         dos.flush();
+                         enviados = enviados + l;
+                         porcentaje = (int)((enviados*100)/tam);
+                         System.out.print("\rEnviado el "+porcentaje+" % del archivo\n ");
+                     }//while
+                     dis.close();
+                     dos.close();
+                     cF.close();
+                }//for
+                
+                cl.close();
+            }//if
+        }catch(Exception e){
+            e.printStackTrace();
+        }//catch
+    }//GEN-LAST:event_uploadMulFilesPanelMouseClicked
+
+    private void downloadMulFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadMulFilesPanelMouseClicked
+        // TODO add your handling code here:
+//        for(int i=0;i<selElements.size();i++){
+//            System.out.println("--> " + selElements.get(i));
+//        }System.out.println(selElements.isEmpty());
+        if( selElements.isEmpty() ){
+           loadingLabel.setForeground(Color.red);
+           loadingLabel.setText("Selecciona los archivos");
+        }else{
+            try{
+                //Socket para enviar el nombre del archivo seleccionado
+                int pto = 1070;
+                Socket cl = new Socket("localhost", pto);
+                cl.setReuseAddress(true);
+                System.out.println("Preparando para enviar los nombres de los  archivos ...");
+                //Configuración para envio
+                ObjectOutputStream oos = new ObjectOutputStream(cl.getOutputStream());
+                //Envio de datos de confirmación
+                Objeto ob = new Objeto(selElements);
+                System.out.println("Enviando rutas de los archivos seleccionados:\n");
+                for(int j=0; j<selElements.size();j++){
+                    System.out.println("\t--> " + ob.getName(j)+ "\n");
+                }
+                oos.writeObject(ob);
+                oos.flush();
+                System.out.println("Objeto enviado..");
+ 
+                  //Recibiendo archivos
+                 String dir = "192.168.0.9";
+                 String Udir = "C:\\Users\\reyma\\Desktop\\MARCO\\";
+                 
+             
+                   System.out.println( "-->" + ob.getSize_List());                  
+
+                    for(int i=0; i<ob.getSize_List();i++){
+                        Socket cF = new Socket(dir,pto+(i+1));
+                        System.out.println("Conexion con servidor establecida...");
+                        DataInputStream fileIS = new DataInputStream(cF.getInputStream());
+                        String nm = fileIS.readUTF(); 
+                        long tam = fileIS.readLong();                        
+                        System.out.println("Comienza descarga del archivo "+nm+" de "+tam+" bytes\n\n");
+
+                        DataOutputStream dos = new DataOutputStream(new FileOutputStream(Udir+nm));
+                        
+                        
+                        long recibidos=0;                
+                        int l=0, porcentaje=0;
+                        while(recibidos<tam){
+                               byte[] b = new byte[2000];
+                               l = fileIS.read(b);
+                               System.out.println("leidos: "+l);
+                               dos.write(b,0,l);
+                               dos.flush();
+                               recibidos = recibidos + l;
+                               porcentaje = (int)((recibidos*100)/tam);
+                               System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
+                           }//while
+                        System.out.println("Archivo recibido..");
+                        fileIS.close();
+                        dos.close();
+                        cF.close();
+                    }//FOR
+                oos.close();        
+                cl.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }//GEN-LAST:event_downloadMulFilesPanelMouseClicked
+
+    private void deleteLocalBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocalBTNMouseClicked
+        // TODO add your handling code here:
+        if( selElements.isEmpty() ){
+           loadingLabel.setForeground(Color.red);
+           loadingLabel.setText("Selecciona los archivos");
+        }else{
+            for(int i=0; i<selElements.size();i++){
+                loadingLabel.setForeground(Color.red);
+                File f = new File(selElements.get(i));
+                loadingLabel.setText("Eliminando|-->" + f.getName());
+                System.out.println("Eliminando|-->" + f.getName());
+                f.delete();
+            }//for
+            loadingLabel.setForeground(Color.green);
+            loadingLabel.setText("Archivos eliminados");
+            System.out.println("Archivos eliminados");
+            }
+        
+    }//GEN-LAST:event_deleteLocalBTNMouseClicked
+
+    private void deleteRemoteBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteRemoteBTNMouseClicked
+        // TODO add your handling code here:
+        if( selElements.isEmpty() ){
+           loadingLabel.setForeground(Color.red);
+           loadingLabel.setText("Selecciona los archivos");
+        }else{
+            try{
+               //Socket para enviar el nombre del archivo seleccionado
+                int pto = 1045;
+                Socket cl = new Socket("localhost", pto);
+                cl.setReuseAddress(true);
+                System.out.println("Preparando para enviar los nombres de los  archivos ..."); 
+                 //Configuración para envio
+                 ObjectOutputStream oos = new ObjectOutputStream(cl.getOutputStream());
+                
+                //Envio de los nombres
+                Objeto ob = new Objeto(selElements);
+                System.out.println("Enviando rutas de los archivos seleccionados:\n");
+                for(int j=0; j<selElements.size();j++){
+                    System.out.println("\t--> " + ob.getName(j)+ "\n");
+                }
+                
+                System.out.println("Enviando objeto con Flag: " + ob.getX());
+                oos.writeObject(ob);
+                oos.flush();
+                System.out.println("Objeto enviado..");
+                //Recepcion de confirmacion
+                ObjectInputStream ois = new ObjectInputStream(cl.getInputStream());
+                Objeto ob2 = (Objeto) ois.readObject();
+                System.out.println("Objeto recibido desde " + cl.getInetAddress() + ":" + cl.getPort() + " con los datos:");
+                System.out.println("Flag:" + ob2.getX());
+                ois.close();
+                oos.close();
+                cl.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }//try
+        }
+    }//GEN-LAST:event_deleteRemoteBTNMouseClicked
     
     /**
      * @param args the command line arguments

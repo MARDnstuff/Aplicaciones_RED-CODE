@@ -6,7 +6,7 @@
 package com.mycompany.drive;
 import java.net.*;
 import java.io.*;
-
+//Subir un archivo o carpeta 
 /**
  *
  * @author Mauricio
@@ -16,19 +16,19 @@ public class WritterServer {
         try{
             // Server for metadata
             int i;
-            int pto = 1026;
-            String rootPath = "C:\\Users\\Mauricio\\Documents\\ESCOM\\5semestre\\RedesII\\Cloud_Files\\";
-            ServerSocket sMetadata = new ServerSocket(pto);
-            sMetadata.setReuseAddress(true);
+            int pto = 1050;
+            String rootPath = "C:\\Users\\reyma\\Desktop\\Practicas_RED\\Practica_1\\Aplicaciones_RED-CODE\\Cloud_Files\\";
+            ServerSocket s = new ServerSocket(pto);
+            s.setReuseAddress(true);
             System.out.println("Servidor de metadatos iniciado");
             String dirName;
             for(;;){
                 // Accept client connection
-                Socket clMetadata = sMetadata.accept();
-                System.out.println("Cliente conectado desde "+clMetadata.getInetAddress()+":"+clMetadata.getPort());
-                DataInputStream nFilesStream = new DataInputStream(clMetadata.getInputStream());
-                int nFiles = nFilesStream.readInt();
-                dirName = nFilesStream.readUTF();
+                Socket cl = s.accept();
+                System.out.println("Cliente conectado desde "+cl.getInetAddress()+":"+cl.getPort());
+                DataInputStream dis = new DataInputStream(cl.getInputStream());
+                int nFiles = dis.readInt();
+                dirName = dis.readUTF();
                 
                 System.out.println("N.Files: "+nFiles);
                 System.out.println("Dirname: "+dirName);
@@ -40,17 +40,15 @@ public class WritterServer {
                     System.out.println("Filedir: "+newDir.getAbsolutePath());
                 }
 
-                //Server for files
-                ServerSocket sFiles = new ServerSocket(pto+1);
-                sFiles.setReuseAddress(true);
-                System.out.println("Servidor de archivos iniciado");
-
                 for(i = 0; i < nFiles; i++){
-                    Socket clFiles = sFiles.accept();
-                    System.out.println("Cliente conectado desde "+clFiles.getInetAddress()+":"+clFiles.getPort());
-                    DataInputStream fileIS = new DataInputStream(clFiles.getInputStream());
+                    ServerSocket sF = new ServerSocket(pto+(i+1));
+                    sF.setReuseAddress(true);
+                    Socket sFiles = sF.accept();
+                    DataInputStream fileIS = new DataInputStream(sFiles.getInputStream());
+                    System.out.println("Cliente conectado desde "+sFiles.getInetAddress()+":"+sFiles.getPort());                   
                     String nombre = fileIS.readUTF();
                     long tam = fileIS.readLong();
+                    
                     System.out.println("Comienza descarga del archivo "+nombre+" de "+tam+" bytes\n\n");
                     DataOutputStream fileOS;
                     if(!dirName.equals("file")){
@@ -62,7 +60,7 @@ public class WritterServer {
                     long recibidos=0;
                     int l=0, porcentaje=0;
                     while(recibidos<tam){
-                        byte[] b = new byte[20000];
+                        byte[] b = new byte[2000];
                         l = fileIS.read(b);
                         System.out.println("leidos: "+l);
                         fileOS.write(b,0,l);
@@ -74,9 +72,12 @@ public class WritterServer {
                     System.out.println("Archivo recibido..");
                     fileOS.close();
                     fileIS.close();
-                    clFiles.close();
+                    sFiles.close();
+                    sF.close();
                 }//for
-            }
+                dis.close();               
+                cl.close();
+            }//for
         }catch(Exception e){
             e.printStackTrace();
         }  
