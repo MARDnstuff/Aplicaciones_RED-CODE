@@ -21,7 +21,7 @@ import java.net.Socket;
 public class DownloadServer {
     public static void main(String[] args){
         try{
-            int pto = 1030;
+            int pto = 2000;
             ServerSocket ss = new ServerSocket(pto);
             ss.setReuseAddress(true);
             System.out.println("Servidor iniciado - DESCARGAS");
@@ -51,11 +51,13 @@ public class DownloadServer {
                     String nombre = f.getName();
                     String path = f.getAbsolutePath();
                 long tam = f.length();
-                System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
+                System.out.println("\nPreparandose para enviar archivo "+path+" de "+tam+" bytes\n\n");
                 //Servidor para archivos -- Cambio de flujo               
-              
+                ServerSocket sD = new ServerSocket(2500);
+                   sF.setReuseAddress(true);
+                  Socket sC = sD.accept();
                 System.out.println("Servidor para envio de archivos iniciado ...");              
-                DataOutputStream fileOS = new DataOutputStream(sFiles.getOutputStream());
+                DataOutputStream fileOS = new DataOutputStream(sC.getOutputStream());
                 DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
                     fileOS.writeUTF(nombre);
                     fileOS.flush();
@@ -78,28 +80,28 @@ public class DownloadServer {
                     //loadingLabel.setText("Archivo enviado");
                     fileIS.close();
                     fileOS.close();
-                    sF.close();
+                    sD.close(); 
                     cl.close();  
                     
                 }else{//Si es un directorio
-                    File[] files = f.listFiles();
-                    dirname = f.getName();
+                    File[] files = f.listFiles();                  
+                    dirname = f.getName()+"(Nueva carpeta)";
                     nFilesStream.writeInt(files.length);
                     nFilesStream.flush();
                     nFilesStream.writeUTF(dirname);
                     nFilesStream.flush();
                     
                     for(int i=0 ; i<files.length;i++){
+                        ServerSocket sD = new ServerSocket(3000 +(i+2));
+                        sF.setReuseAddress(true);
+                        Socket sC = sD.accept();
+                        
                         String nombre = files[i].getName();
                         String path = files[i].getAbsolutePath();
                         long tam = files[i].length();
                         System.out.println("Preparandose pare enviar archivo "+path+" de "+tam+" bytes\n\n");
-                        //Servidor para carpetas
-//                        ServerSocket sF = new ServerSocket(pto+1);
-//                        sF.setReuseAddress(true);
-//                        Socket sFiles = sF.accept();
                         System.out.println("Servidor para envio de archivos iniciado ...");  
-                        DataOutputStream fileOS = new DataOutputStream(sFiles.getOutputStream());
+                        DataOutputStream fileOS = new DataOutputStream(sC.getOutputStream());
                         DataInputStream fileIS = new DataInputStream(new FileInputStream(path));
                         fileOS.writeUTF(nombre);
                         fileOS.flush();
@@ -117,10 +119,11 @@ public class DownloadServer {
                             porcentaje = (int)((enviados*100)/tam);
                             System.out.print("\rEnviado el "+porcentaje+" % del archivo");
                         }//while
-                        //fileIS.close();
-                        //fileOS.close();
+                        fileIS.close();
+                        fileOS.close();
+                        sC.close();
                     }//for
-                    
+                   
                         
                 }
                 

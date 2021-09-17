@@ -75,11 +75,9 @@ class Objeto implements Serializable{
                 
                 if(archivos[i].isDirectory()){
                    DefaultMutableTreeNode hijo = new DefaultMutableTreeNode(archivos[i].getAbsolutePath());
-                 
-                   raiz.add(hijo);
-                   //System.out.println("|-->" + n_Archivo);
-                   Objeto x = new Objeto();
-                    hijo.add(x.MyCloud(archivos[i].getAbsolutePath()));
+                 Objeto x = new Objeto();
+                   raiz.add(x.MyCloud(archivos[i].getAbsolutePath()));
+
                     
                 }else{
                   DefaultMutableTreeNode hijo =  new DefaultMutableTreeNode(archivos[i].getAbsolutePath());

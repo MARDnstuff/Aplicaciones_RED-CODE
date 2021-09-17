@@ -22,6 +22,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import java.util.*;  
 
+
 /**
  *
  * @author Mauricio
@@ -495,8 +496,11 @@ public class controlFrame extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(347, 347, 347)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(titleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -506,10 +510,7 @@ public class controlFrame extends javax.swing.JFrame {
                             .addComponent(localButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(remoteButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(loadingLabel))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(347, 347, 347)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(loadingLabel)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -551,7 +552,7 @@ public class controlFrame extends javax.swing.JFrame {
         titleLabel.setForeground(Color.blue);
         remoteButtonsPanel.setVisible(false);
         localButtonsPanel.setVisible(false);
-        FilesView.setVisible(false);
+        FilesView.setVisible(false);       
     }//GEN-LAST:event_HomeMouseClicked
 
     private void remoteFilesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remoteFilesPanelMouseClicked
@@ -598,6 +599,7 @@ public class controlFrame extends javax.swing.JFrame {
         localButtonsPanel.setVisible(true);
         remoteButtonsPanel.setVisible(false);
         String Udir = "C:\\Users\\reyma\\Desktop\\MARCO";//Dirección se debe cambiar a la se usuario
+        //String Udir = "C:\\Users\\reyma\\Desktop\\Practicas_RED\\Practica_1\\Aplicaciones_RED-CODE\\Cloud_Files";
         UserCloud obj = new UserCloud();
         JTree obj2 = new JTree (obj.MyFiles(Udir));
         Tree1.setModel(obj2.getModel());
@@ -667,7 +669,7 @@ public class controlFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteRemoteBTNMouseExited
 
     private void uploadBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadBTNMouseClicked
-
+        
         //Checking if the user has selected a file or a directory
         if(selElement.equals("not selected") || selElement == null){
            loadingLabel.setForeground(Color.red);
@@ -768,6 +770,8 @@ public class controlFrame extends javax.swing.JFrame {
                     nFilesStream.close();
                     
                     loadingLabel.setText("Carpeta enviada");
+                    selElement = "not selected";
+                    selElements.clear();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -799,7 +803,7 @@ public class controlFrame extends javax.swing.JFrame {
         }else{
             try{
                 //Socket para enviar el nombre del archivo seleccionado
-                int pto = 1030;
+                int pto = 2000;
                 Socket cl = new Socket("localhost", pto);
                 cl.setReuseAddress(true);
                 System.out.println("Preparando para enviar nombre del archivo ...");
@@ -811,9 +815,7 @@ public class controlFrame extends javax.swing.JFrame {
                 oos.writeObject(ob);
                 oos.flush();
                 System.out.println("Objeto enviado..");
-                
-                
-                
+
                   //Recibiendo archivos
                  String dir = "192.168.0.9";
                  String Udir = "C:\\Users\\reyma\\Desktop\\MARCO\\";
@@ -825,50 +827,78 @@ public class controlFrame extends javax.swing.JFrame {
                   int nFiles = dis.readInt(); 
                   String nombre = dis.readUTF();
                    System.out.println(nombre + "-->" + nFiles);
-                    if(nFiles > 1){
-                      File newDir = new File(Udir + nombre);
-                      newDir.mkdirs();
-                      newDir.setWritable(true);
-                      System.out.println("Filedir: "+newDir.getAbsolutePath());
-                    }
-                    System.out.println(nFiles);
-                    for(int i=0; i<nFiles;i++){
-                        DataInputStream fileIS = new DataInputStream(cF.getInputStream());
-                        String nm = fileIS.readUTF(); 
-                        long tam = fileIS.readLong();                        
-                        System.out.println("Comienza descarga del archivo "+nm+" de "+tam+" bytes\n\n");
+                   
+                    if(!nombre.contains("(Nueva carpeta)")){
+                      Socket sC = new Socket(dir,2500);
+                      DataInputStream fileIS = new DataInputStream(sC.getInputStream());
+                      DataOutputStream dos = new DataOutputStream(new FileOutputStream(Udir+nombre));
+                      String nm = fileIS.readUTF();
+                      long tam = fileIS.readLong();
+                      System.out.println("Comienza descarga del archivo "+nm+" de "+tam+" bytes\n\n");
+                      long recibidos=0;                
+                            int l=0, porcentaje=0;
+                            while(recibidos<tam){
+                                   byte[] b = new byte[1500];
+                                   l = fileIS.read(b);
+                                   System.out.println("leidos: "+l);
+                                   dos.write(b,0,l);
+                                   dos.flush();
+                                   recibidos = recibidos + l;
+                                   porcentaje = (int)((recibidos*100)/tam);
+                                   System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
 
-                        DataOutputStream dos;
-                        
-                        if(nFiles > 1){
-                            dos = new DataOutputStream(new FileOutputStream(Udir+nombre+"\\"+nm));
-                        }
-                        else{
-                            dos = new DataOutputStream(new FileOutputStream(Udir+nombre));
-                        }
-                        
-                        long recibidos=0;                
-                        int l=0, porcentaje=0;
-                        while(recibidos<tam){
-                               byte[] b = new byte[1500];
-                               l = dis.read(b);
-                               System.out.println("leidos: "+l);
-                               dos.write(b,0,l);
-                               dos.flush();
-                               recibidos = recibidos + l;
-                               porcentaje = (int)((recibidos*100)/tam);
-                               System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
-                           }//while
-                        System.out.println("Archivo recibido..");
-                        dos.close();                      
-                        
-                        
-                    }
+                               }//while
+                            System.out.println("\nArchivo recibido..");
+                            dos.close();                      
+                            fileIS.close();
+                            sC.close();
+                      
+                    }else{
+                        File newDir = new File(Udir + nombre);
+                        newDir.mkdirs();
+                        newDir.setWritable(true);
+                        System.out.println("Filedir: "+newDir.getAbsolutePath());
+                        for(int i=0; i<nFiles;i++){
+                            Socket sC = new Socket(dir,3000 + (i+2));
+                            DataInputStream fileIS = new DataInputStream(sC.getInputStream());
+                            String nm = fileIS.readUTF(); 
+                            long tam = fileIS.readLong();                        
+                            System.out.println("Comienza descarga del archivo "+nm+" de "+tam+" bytes\n\n");
+
+                            DataOutputStream dos = new DataOutputStream(new FileOutputStream(Udir+nombre+"\\"+nm));
+
+                            System.out.println("AQUI");
+                            long recibidos=0;                
+                            int l=0, porcentaje=0;
+                            while(recibidos<tam){
+                                   byte[] b = new byte[1500];
+                                   l = fileIS.read(b);
+                                   System.out.println("leidos: "+l);
+                                   dos.write(b,0,l);
+                                   dos.flush();
+                                   recibidos = recibidos + l;
+                                   porcentaje = (int)((recibidos*100)/tam);
+                                   System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
+
+                               }//while
+                            System.out.println("\nArchivo recibido.." + i);
+                            dos.close();                      
+                            fileIS.close();
+                            sC.close();
+                        }//for
+
+                    
+                    }//if
+                    System.out.println(nFiles);
+                    
+                    
                 
                 
                 cF.close();
                oos.close();
                 cl.close();
+                selElement = "not selected";
+                selElements.clear();
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -937,6 +967,8 @@ public class controlFrame extends javax.swing.JFrame {
                 }//for
                 
                 cl.close();
+                selElement = "not selected";
+                selElements.clear();
             }//if
         }catch(Exception e){
             e.printStackTrace();
@@ -996,8 +1028,9 @@ public class controlFrame extends javax.swing.JFrame {
                                System.out.println("leidos: "+l);
                                dos.write(b,0,l);
                                dos.flush();
-                               recibidos = recibidos + l;
+                               recibidos = recibidos + l;                              
                                porcentaje = (int)((recibidos*100)/tam);
+
                                System.out.print("\rRecibido el "+ porcentaje +" % del archivo");
                            }//while
                         System.out.println("Archivo recibido..");
@@ -1007,6 +1040,8 @@ public class controlFrame extends javax.swing.JFrame {
                     }//FOR
                 oos.close();        
                 cl.close();
+                selElement = "not selected";
+                 selElements.clear();
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1030,6 +1065,8 @@ public class controlFrame extends javax.swing.JFrame {
             loadingLabel.setForeground(Color.green);
             loadingLabel.setText("Archivos eliminados");
             System.out.println("Archivos eliminados");
+            selElement = "not selected";
+            selElements.clear();
             }
         
     }//GEN-LAST:event_deleteLocalBTNMouseClicked
@@ -1068,6 +1105,8 @@ public class controlFrame extends javax.swing.JFrame {
                 ois.close();
                 oos.close();
                 cl.close();
+                selElement = "not selected";
+                selElements.clear();
             }catch(Exception e){
                 e.printStackTrace();
             }//try
