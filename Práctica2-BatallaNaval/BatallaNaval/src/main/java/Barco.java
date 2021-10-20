@@ -39,12 +39,40 @@ public class Barco {
         }
     }
 
-   
+    public void showMyBoat(Barco b){
+        int tam = b.casillas.size();
+        for(int i=0; i<tam; i++){
+            System.out.println("["+i+"]"+"-->"+"X:"+b.casillas.get(i).getX()+"Y:"+b.casillas.get(i).getY());
+        }//for
+    }
     
-    /*public Casilla getCasilla(){
-        
-    }*/
     public Casilla getCasillaInicio(){
         return casillas.get(0);
+    }
+    
+    public boolean isBoat_Destroy(int x, int y){
+        
+        
+        for(int i=0; i<this.casillas.size(); i++){
+            if(this.casillas.get(i).getX()== x && this.casillas.get(i).getY() == y){
+                this.casillas.get(i).setBombarded(true);
+                this.casillasBombardeadas.add(this.casillas.get(i));
+                return true;
+            }//if
+        }//for
+        return false;
+    }
+    
+    public boolean isAllBoatsDestroy(Barco[] b){
+        for(int i=0; i<b.length;i++){
+            for(int j=0; j<b[i].casillas.size();j++){
+                if(!(b[i].casillas.get(j).isBombarded())){
+                    return false;
+                }//if
+            }//for
+        }//for
+        
+        
+        return true;
     }
 }

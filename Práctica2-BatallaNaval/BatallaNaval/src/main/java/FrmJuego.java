@@ -4,6 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,12 +31,14 @@ import javax.swing.JPanel;
  */
 public class FrmJuego extends javax.swing.JFrame {
     String nombreJugador;
+    Casilla targetCl = new Casilla();
     int numFilas=10;
     int numColumnas=10;
     int numMinas=10;
     int ganador = -1;
     boolean ordenaBarco = false;
     private int numCasillasSeleccionadas = 0;
+                                            
     private static final String[] coordY = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
     
     
@@ -494,6 +503,7 @@ public class FrmJuego extends javax.swing.JFrame {
                     validDestructor = validarDestructor(barcos[nBarco-1].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
                 }
                 colocarCasillas(nombreBarco,1, nBarco, validDestructor, barcos[nBarco-1].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
+                barcos[nBarco - 1].getCasillaInicio().setY(posColumnaInicial - 1);
                 break;
             //Crucero
             case 2:
@@ -519,6 +529,7 @@ public class FrmJuego extends javax.swing.JFrame {
                     validCrucero = validarCrucero(barcos[2+nBarco].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
                 }
                 colocarCasillas(nombreBarco,2, nBarco, validCrucero, barcos[2+nBarco].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
+                barcos[2+nBarco].getCasillaInicio().setY(posColumnaInicial - 1);
                 break;
             //Acorazado    
             case 3:
@@ -544,6 +555,7 @@ public class FrmJuego extends javax.swing.JFrame {
                     validAcorazado = validarAcorazado(barcos[5].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
                 }
                 colocarCasillas(nombreBarco,3, nBarco, validAcorazado, barcos[5].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
+                barcos[5].getCasillaInicio().setY(posColumnaInicial - 1);
                 break;
             //Submarino
             case 4: 
@@ -569,6 +581,7 @@ public class FrmJuego extends javax.swing.JFrame {
                     validSubmarino = validarSubmarino(barcos[6].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
                 }
                 colocarCasillas(nombreBarco,4, nBarco, validSubmarino, barcos[6].getCasillaInicio(),new Casilla(posFilaFinal, posColumnaFinal));
+                barcos[6].getCasillaInicio().setY(posColumnaInicial - 1);
                 break;
         }
         
@@ -820,7 +833,191 @@ public class FrmJuego extends javax.swing.JFrame {
         ordenarBarco(1, 2);
         
         JOptionPane.showMessageDialog(ContainerPanel, "Ordena tu barco destructor 3(longitud: 2 casillas)");
-        ordenarBarco(1, 3);
+        ordenarBarco(1, 3); 
+        System.out.println("-->CLIENTE FINALIZO ACOMODO<--");
+        //--> COMUNICACION CON SERVIDOR <--
+        try{
+            String host="127.0.0.1";
+            int port=1700;           
+            // 1) Creatting DatagramSocket object 
+            InetAddress dst = InetAddress.getByName(host);
+            DatagramSocket client = new DatagramSocket();
+            System.out.println("Destino-->" + dst.toString());
+            
+            //2) Creating the outgoing datagram
+            System.out.println("Cliente iniciado, generando objeto a ser enviado a " + host + ":" + port);
+            System.out.println("--> COMUNICANDO CON SERVIDOR <--");
+            //Creacion de paquete casilla para empezar el juego
+            Casilla target = new Casilla(); //Inicializamos con -1
+            target.setFlag(1);            
+            ByteArrayOutputStream baos= new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(target);
+            oos.flush();
+            byte[] b = baos.toByteArray();
+            DatagramPacket pkt = new DatagramPacket(b,b.length,dst,port);
+            
+            //3) Send the datagram message
+            client.send(pkt);
+            System.out.println("envio FLAG:" +target.getFlag());
+            int X= -1, Y=-1;
+             System.out.println("-->EMPIEZA JUEGO<--");
+            while(true){
+                int exFlag = -1;
+                //4) Create a DatagramPacket object for incoming  datagrams
+                System.out.println("Esperando recibir objeto..");
+                DatagramPacket pkt_r = new DatagramPacket(new byte[65535],65535);
+                
+                //5) Accept an incoming datagram
+                client.receive(pkt_r);
+                
+                //6) Retrieve the data from the buffer
+                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(pkt_r.getData()));
+                Casilla target_back = (Casilla)ois.readObject();   
+                System.out.println("FLAG:"+target_back.getFlag());
+                
+                Casilla target2 = new Casilla(); //Inicializamos con -1
+                switch(target_back.getFlag()){
+                    case 0:{
+                        JOptionPane.showMessageDialog(ContainerPanel, "FELICIDADES, JUGADOR: " + nombreJugador + " GANA");
+                        //7) Close the DatagramSocket
+                        exFlag = 10;
+                        break;
+                    }
+                    case 1:{//SERVIDOR LISTO
+                       
+                        System.out.println("-->TURNO CLIENTE<--");
+                        String coordInicial = JOptionPane.showInputDialog(ContainerPanel, "Ingresa la coordenada de para atacar a tu contrincante: ");
+                        while(!validCoord(coordInicial)){
+                            coordInicial = JOptionPane.showInputDialog(ContainerPanel, "Ingresa una coordenada válida:");
+                        }
+                        String[] coordenada1=coordInicial.split(",");
+                        int i = 0, posFilaInicial = 0, posColumnaInicial = 0;
+                        posColumnaInicial=Integer.parseInt(coordenada1[1]);
+
+                        while(!coordY[i].equalsIgnoreCase(coordenada1[0]) && i < coordY.length){
+                            i++;
+                        }
+                        if(i < coordY.length){
+                             posFilaInicial = i;
+                        }
+                        JOptionPane.showMessageDialog(ContainerPanel, "posFila: " + posFilaInicial + " posColumna: " + posColumnaInicial);
+                        System.out.println(posFilaInicial + "-->" + posColumnaInicial);
+                        target2.setFlag(2);
+                        target2.setX(posFilaInicial);
+                        target2.setY(posColumnaInicial - 1);
+                        X = posFilaInicial;
+                        Y = posColumnaInicial;
+                        
+                        break;
+                    }
+                    case 2:{//RECEPCION DE VERFICACION DE TIRO - TIRO ACERTADO
+                        System.out.println("--> VERIFICACION DE TIRO <--");
+                        botonesTablero2[X][Y-1].setBackground(Color.green);
+                        JOptionPane.showMessageDialog(ContainerPanel, "TIRO ACERTADO");
+                        target2.setFlag(3);//CAMBIO DE TURNO
+                        
+                        break;
+                    }
+                    case 3:{//RECEPCION DE VERIFICACION DE TIRO - TIRO FALLADO
+                        System.out.println("--> VERIFICACION DE TIRO 2 <--");
+                        botonesTablero2[X][Y-1].setBackground(Color.RED);
+                        JOptionPane.showMessageDialog(ContainerPanel, "TIRO FALLADO");
+                        target2.setFlag(3);
+                        break;
+                    }
+                    case 4:{//VERIFICACION DE TIRO DEL SERVIDOR
+                        System.out.println("--> VERIFICACION DE ATAQUE A CLIENTE <--");
+                        int ex = 0;
+                        for(int i=0; i< this.barcos.length ; i++){
+                            if(this.barcos[i].isBoat_Destroy(target_back.getX(),target_back.getY())){
+                                //SERVIDOR DESTRUYE UN COORDENADA
+                                botonesTablero1[target_back.getX()][target_back.getY()].setBackground(Color.RED);
+                                JOptionPane.showMessageDialog(ContainerPanel, "TIRO ACERTADO POR PARTE DEL SERVIDOR");
+                                target2.setFlag(4); // INFORME DE TIRO A SERVIDOR ACERTADO
+                                ex++;
+                                break;
+                            }//if
+                        }//for
+                        if(ex >0){
+                            break;
+                        }
+                        //SERVIDOR DESTRUYE UN COORDENADA
+                        JOptionPane.showMessageDialog(ContainerPanel, "TIRO FALLADO POR PARTE DEL SERVIDOR: X:" + target_back.getX() + " Y:"+ target_back.getY());
+                        target2.setFlag(4); // INFORME DE TIRO A SERVIDOR FALLADO
+                        break;
+                    }
+                }//switch
+                
+                
+                
+                    Barco b3 = new Barco();
+                    if(b3.isAllBoatsDestroy(barcos)){
+                        target2.setFlag(5);
+                        JOptionPane.showMessageDialog(ContainerPanel, "SUERTE PARA LA PROXIMA,SERVIDOR GANA :C ");
+                        //7) Close the DatagramSocket
+                        ByteArrayOutputStream baos2= new ByteArrayOutputStream();
+                        ObjectOutputStream oos2 = new ObjectOutputStream(baos2);
+                        oos2.writeObject(target2);
+                        oos2.flush();
+                        byte[] b_ = baos2.toByteArray();
+                        DatagramPacket pkt2 = new DatagramPacket(b_,b_.length,dst,port);
+                        client.send(pkt2);
+                        client.close();
+                        System.exit(0);
+                    }
+
+                
+                ByteArrayOutputStream baos2= new ByteArrayOutputStream();
+                ObjectOutputStream oos2 = new ObjectOutputStream(baos2);
+                oos2.writeObject(target2);
+                oos2.flush();
+                byte[] b2 = baos2.toByteArray();
+                DatagramPacket pkt2 = new DatagramPacket(b2,b2.length,dst,port);
+                client.send(pkt2);
+                if(exFlag == 10){
+                    client.close();
+                    System.exit(0);
+                }
+            
+            
+            
+            }//while
+            
+            
+            
+            //NOTA:
+            //1)Se tiene que revisar la implementacion del tablero de Mau, ya que él
+            //implemento con una lista de casillas
+            // --> barcos[6].showMyBoat(barcos[6]); con este metodo podemos entender el como los tiene implementado
+            
+            //2)Meter en un for infinito y hacer un switch para las flags
+            
+            //3)Los turnos van a ser uno a uno
+            
+            //4)Creo que no se compartira el tablero, solo sera que si 
+            //uno le atina le otro confirma que si se dio y se cambia el color en el 
+            //tablero del cliente 
+            
+            //5)GUI anunciara a que casilla le dio y si le da a un barco se confirmara 
+            //en el mensaje de dialogo
+            
+           
+//            barcos[0] -> destructor 1;
+//            barcos[1] -> destructor 2;
+//            barcos[2] -> destructor 3;
+//            barcos[3] -> crucero 1;
+//            barcos[4] -> crucero 2;
+//            barcos[5] -> acorazado;
+//            barcos[6] -> submarino;
+
+            
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        
         
     }//GEN-LAST:event_PlayBTNMouseClicked
 
@@ -857,6 +1054,7 @@ public class FrmJuego extends javax.swing.JFrame {
                 new FrmJuego().setVisible(true);
             }
         });
+     
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
