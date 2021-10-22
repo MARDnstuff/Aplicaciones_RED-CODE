@@ -6,13 +6,21 @@
 package com.mycompany.chatmulticast.UI;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.io.File;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
  * @author Mauricio
  */
 public class ChatView extends javax.swing.JFrame {
-    private String nickName;
+    private String nickName, path;
+    public JLabel[] emojisLabels;
+    public ImageIcon[] emojisIcons;
+    
     /**
      * Creates new form ChatView
      */
@@ -25,8 +33,80 @@ public class ChatView extends javax.swing.JFrame {
      */
     public ChatView(String nickName) {
         initComponents();
+        loadEmojis();
         this.nickName = nickName;
         nickNameLabel.setText(nickName+"(Tú)");
+    }
+    
+    private void loadEmojis(){
+        int xReference = 15, yReference = 80;
+        int width=30;
+        int height=30;
+        emojisIcons = new ImageIcon[40];
+        emojisLabels = new JLabel[40];
+        File f = new File("");
+        String path = f.getAbsolutePath();
+        this.path=path;
+        System.out.println("Path: " + path);
+        JLabel name = new JLabel(nickName);
+        name.setForeground(Color.green);
+        name.setBounds(xReference+10, yReference-20, width, height);
+        emojisPanel.add(name);
+        int i;
+             
+        for (i = 0; i < emojisLabels.length; i++) {
+            emojisIcons[i] = new ImageIcon(path+"\\src\\img\\emoji" + (i+1) + ".png");
+            Icon emoji = new ImageIcon(emojisIcons[i].getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+            emojisLabels[i] = new JLabel(emoji);
+            //emojisLabels[i] = new JLabel("Hello");
+            emojisLabels[i].setForeground(Color.green);
+            //emojisLabels[i].setBounds(xReference+10, yReference-20, width, height);
+            //ImageIcon foto = new ImageIcon("C:\\Users\\52552\\Documents\\NetBeansProjects\\tttttttttt\\cara.gif");
+            //emojisLabels[i].setIcon(emoji); 
+            if(i%4 == 0){
+                if(i == 0){
+                    emojisLabels[i].setBounds(xReference+10, yReference-40, width, height);
+                }
+                else{
+                    emojisLabels[i].setBounds(
+                            xReference+10,
+                            emojisLabels[i-4].getY()+emojisLabels[i-4].getHeight()+5, 
+                            width, height);
+                }
+                
+            }
+            else{
+                if(i < 4)
+                {
+                    emojisLabels[i].setBounds(
+                            emojisLabels[i-1].getX()+emojisLabels[i-1].getWidth()+5,
+                            yReference-40, 
+                            width, height);
+                }
+                
+                else{
+                    emojisLabels[i].setBounds(
+                            emojisLabels[i-1].getX()+emojisLabels[i-1].getWidth()+5,
+                            emojisLabels[i-4].getY()+emojisLabels[i-4].getHeight()+5, 
+                            width, height);
+                }
+                
+            
+            }
+            emojisPanel.add(emojisLabels[i]); 
+        }
+        
+        /*for(int i = 0; i < emojisIcons.length; i++){
+            emojisIcons[i] = new ImageIcon(path+"\\emoji1.gif");
+            emojisLabels[i] = new JLabel();
+            emojisLabels[i].setBounds(xReference+10, yReference-20, width, height);
+            //ImageIcon foto = new ImageIcon("C:\\Users\\52552\\Documents\\NetBeansProjects\\tttttttttt\\cara.gif");
+            Icon emoji = new ImageIcon(emojisIcons[i].getImage().getScaledInstance(emojisLabels[i].getWidth(),emojisLabels[i].getHeight(),Image.SCALE_DEFAULT));
+            emojisLabels[i].setIcon(emoji);
+            emojisPanel.add(emojisLabels[i]);
+        }
+        emojisPanel.add(emojisLabels[0]);*/
+    
     }
 
     /**
@@ -42,12 +122,14 @@ public class ChatView extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         sendMessageBtn = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        messagePanel = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        userSelectedCBox = new javax.swing.JComboBox<>();
+        usersPanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         nickNameLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        emojisPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
@@ -81,41 +163,57 @@ public class ChatView extends javax.swing.JFrame {
         sendMessageBtnLayout.setHorizontalGroup(
             sendMessageBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sendMessageBtnLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(57, 57, 57)
                 .addComponent(jLabel1)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         sendMessageBtnLayout.setVerticalGroup(
             sendMessageBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
         );
 
-        jTextField1.setBorder(null);
+        messagePanel.setBorder(null);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Enviar a:");
+
+        userSelectedCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todo el grupo", "Item 2", "Item 3", "Item 4" }));
+        userSelectedCBox.setBorder(null);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(sendMessageBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(userSelectedCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(messagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(sendMessageBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sendMessageBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
-                .addContainerGap())
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(sendMessageBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(messagePanel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(userSelectedCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
-        background.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 420, 670, 50));
+        background.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, 670, 120));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 255));
+        usersPanel.setBackground(new java.awt.Color(0, 0, 255));
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 255));
 
@@ -143,52 +241,52 @@ public class ChatView extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Usuarios Conectados");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout usersPanelLayout = new javax.swing.GroupLayout(usersPanel);
+        usersPanel.setLayout(usersPanelLayout);
+        usersPanelLayout.setHorizontalGroup(
+            usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(usersPanelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        usersPanelLayout.setVerticalGroup(
+            usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(usersPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(389, Short.MAX_VALUE))
+                .addContainerGap(409, Short.MAX_VALUE))
         );
 
-        background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 470));
+        background.add(usersPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 490));
 
-        jPanel2.setBackground(new java.awt.Color(245, 245, 245));
+        emojisPanel.setBackground(new java.awt.Color(245, 245, 245));
 
         jLabel3.setBackground(new java.awt.Color(102, 204, 255));
         jLabel3.setForeground(new java.awt.Color(51, 102, 255));
         jLabel3.setText("Panel de Emojis y Stickers");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+        javax.swing.GroupLayout emojisPanelLayout = new javax.swing.GroupLayout(emojisPanel);
+        emojisPanel.setLayout(emojisPanelLayout);
+        emojisPanelLayout.setHorizontalGroup(
+            emojisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(emojisPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel3)
-                .addGap(21, 21, 21))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        emojisPanelLayout.setVerticalGroup(
+            emojisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(emojisPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(395, Short.MAX_VALUE))
+                .addContainerGap(345, Short.MAX_VALUE))
         );
 
-        background.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 0, 180, 420));
+        background.add(emojisPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 0, 180, 370));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jScrollPane1.setViewportView(jEditorPane1);
@@ -205,7 +303,9 @@ public class ChatView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -256,17 +356,19 @@ public class ChatView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
+    private javax.swing.JPanel emojisPanel;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField messagePanel;
     private javax.swing.JLabel nickNameLabel;
     private javax.swing.JPanel sendMessageBtn;
+    private javax.swing.JComboBox<String> userSelectedCBox;
+    private javax.swing.JPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }
