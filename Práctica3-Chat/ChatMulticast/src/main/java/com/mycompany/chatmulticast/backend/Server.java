@@ -6,52 +6,30 @@
 package com.mycompany.chatmulticast.backend;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.MulticastSocket;
-import java.net.NetworkInterface;
-import java.net.SocketAddress;
-import java.net.SocketException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.*;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Vector;
+//import java.io.*;
 
 /**
  *
- * @author Mauricio
+ * @author axel
  */
 public class Server {
-    static void despliegaInfoNIC(NetworkInterface netint) throws SocketException {
-        System.out.printf("Nombre de despliegue: %s\n", netint.getDisplayName());
-        System.out.printf("Nombre: %s\n", netint.getName());
-        String multicast = (netint.supportsMulticast())?"Soporta multicast":"No soporta multicast";
-        System.out.printf("Multicast: %s\n", multicast);
-        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
-        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-            System.out.printf("Direccion: %s\n", inetAddress);
-        }
-        System.out.printf("\n");
-    }
-
-
     public static void main(String[] args){
+        Vector<String> usersList = new Vector<String>();
+        String nickName;
         try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-            int z=0,pto= 9930,pto_dst=9931;
-              for (NetworkInterface netint : Collections.list(nets)){
-                  System.out.print("[Interfaz "+ ++z +"]:");
-                 despliegaInfoNIC(netint);
-              }//for
-            System.out.print("\nElige la interfaz multicast:");
-            int interfaz = Integer.parseInt(br.readLine());
+            int pto= 1234;
             //NetworkInterface ni = NetworkInterface.getByName("eth2");
-            NetworkInterface ni = NetworkInterface.getByIndex(interfaz);
-            br.close();
+            NetworkInterface ni = NetworkInterface.getByIndex(1);
             System.out.println("\nElegiste "+ni.getDisplayName());
-
-
             MulticastSocket s = new MulticastSocket(pto);
             s.setReuseAddress(true);
             s.setTimeToLive(255);
@@ -61,21 +39,33 @@ public class Server {
             try{
                  dir = new InetSocketAddress(gpo,pto);
             }catch(Exception e){
-                e.printStackTrace();
-                return;
+              e.printStackTrace();
+               return;
             }//catch
             s.joinGroup(dir, ni);
-            //s.joinGroup(gpo);
-            String msj="<msj> <Pepe>Hola a todos";
-            byte[] b = msj.getBytes();
-            System.out.println("Servicio iniciado.. comienza envio de anuncios");
             for(;;){
-                DatagramPacket p = new DatagramPacket(b,b.length,gpo,pto_dst);
-                s.send(p);
-                  System.out.println("Mensaje enviado con un ttl="+s.getTimeToLive());
-                try{
-                    Thread.sleep(5000);
-                }catch(InterruptedException ie){}
+                DatagramPacket pkt = new DatagramPacket(new byte[65535],65535);
+                System.out.println("Listo para recibir mensajes...");
+                //3) Accept an incoming datagrama
+                s.receive(pkt);
+                //4) Retrieve the data from the buffer
+                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(pkt.getData()));
+                Message message = (Message)ois.readObject();
+                nickName = message.getSender();
+                
+                //join message
+                if(message.getType() == 1){
+                    usersList.add(message.getSender());
+                    message.setUsersList(usersList);
+                    message.setType(4);
+                    ByteArrayOutputStream baos= new ByteArrayOutputStream();
+                    ObjectOutputStream oos = new ObjectOutputStream(baos);
+                    oos.writeObject(message);
+                    oos.flush();
+                    byte[] b = baos.toByteArray();
+                    DatagramPacket pktList = new DatagramPacket(b,b.length,gpo,pto);
+                    s.send(pkt);
+                }
             }
         }catch(Exception e){
             e.printStackTrace();
