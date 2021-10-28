@@ -25,12 +25,17 @@ public class Message implements Serializable{
     private String message;
     private String sender;
     private String addressee;
-    private Vector<String> usersList = new Vector<String>();
+    public Vector<String> usersList = new Vector<String>();
 
     public Message(int type, String sender){
         this.type = type;
         this.message = message;
         this.sender = sender;
+    }
+    
+    public Message(int type, Vector<String> usersList){
+        this.type = type;
+        this.usersList = usersList;
     }
     
     public Message(int type, String message, String sender) {

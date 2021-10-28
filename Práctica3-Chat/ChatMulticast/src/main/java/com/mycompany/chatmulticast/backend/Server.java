@@ -28,7 +28,7 @@ public class Server {
         try{
             int pto= 1234;
             //NetworkInterface ni = NetworkInterface.getByName("eth2");
-            NetworkInterface ni = NetworkInterface.getByIndex(1);
+            NetworkInterface ni = NetworkInterface.getByIndex(14);
             System.out.println("\nElegiste "+ni.getDisplayName());
             MulticastSocket s = new MulticastSocket(pto);
             s.setReuseAddress(true);
@@ -42,29 +42,49 @@ public class Server {
               e.printStackTrace();
                return;
             }//catch
+            //s.joinGroup(gpo);
             s.joinGroup(dir, ni);
             for(;;){
                 DatagramPacket pkt = new DatagramPacket(new byte[65535],65535);
                 System.out.println("Listo para recibir mensajes...");
                 //3) Accept an incoming datagrama
                 s.receive(pkt);
+                
+                System.out.println(pkt.getAddress().toString());
+                System.out.println();
                 //4) Retrieve the data from the buffer
                 ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(pkt.getData()));
                 Message message = (Message)ois.readObject();
                 nickName = message.getSender();
                 
+                System.out.println("Tipo de mensaje: " + message.getType());
+                
                 //join message
                 if(message.getType() == 1){
+                    System.out.println("Se conectó un nuevo usuario");
+                    
+                    //Adding the new user to the online user's list
                     usersList.add(message.getSender());
-                    message.setUsersList(usersList);
-                    message.setType(4);
+                    
+                    //Creating a message with the list
+                    Message usersOnline = new Message(4, usersList);
+                    
+
+                    for(int i = 0; i < usersList.size(); i++){
+                        System.out.println("Usuario conectado: " + usersList.get(i)); 
+                    }
+                    
+                    //Writting and sending the list to the clients
                     ByteArrayOutputStream baos= new ByteArrayOutputStream();
                     ObjectOutputStream oos = new ObjectOutputStream(baos);
-                    oos.writeObject(message);
+                    oos.writeObject(usersOnline);
                     oos.flush();
                     byte[] b = baos.toByteArray();
                     DatagramPacket pktList = new DatagramPacket(b,b.length,gpo,pto);
-                    s.send(pkt);
+                    s.send(pktList);
+                }
+                else if(message.getType() == 4){
+                    System.out.println("Se ha conectado " + message.getSender());
                 }
             }
         }catch(Exception e){

@@ -28,13 +28,15 @@ public class Recibe extends Thread{
     JEditorPane chatPane; 
     DefaultListModel usersModel;
     JComboBox userSelected;
+    int[] usersIndexes;
     Vector<String> usersList;
     String msg;
     String nickName;
-    public Recibe(MulticastSocket m, String nickName, JEditorPane chatPane, DefaultListModel usersModel, JComboBox userSelected){
+    public Recibe(MulticastSocket m, String nickName, JEditorPane chatPane, DefaultListModel usersModel,int[] usersIndexes, JComboBox userSelected){
         this.socket=m;
         this.chatPane = chatPane;
         this.usersModel = usersModel;
+        this.usersIndexes = usersIndexes;
         this.userSelected = userSelected;
         this.nickName = nickName;
     }
@@ -48,7 +50,7 @@ public class Recibe extends Thread{
                 //4) Retrieve the data from the buffer
                 ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(pkt.getData()));
                 Message message = (Message)ois.readObject();
-                System.out.println("Message: " + message.getMessage());
+                System.out.println("Message recibe: " + message.getMessage());
                 String textInChat = this.chatPane.getText();
                 
                 
@@ -67,18 +69,23 @@ public class Recibe extends Thread{
                             this.chatPane.setForeground(new Color(0,204,0));
                         }
                         break;
+                    //Private Message
                     case 3:
                         if(this.nickName.equals(message.getAddressee())){
                             this.chatPane.setText(textInChat+ "\n\n\n[" + message.getSender() + "]        " + message.getMessage());
                         }
                         break;
+                    //UsersList
                     case 4:
-                        this.usersList = message.getUsersList();
-                        for(int i = 0; i < this.usersList.size(); i++){
+                        //this.usersList = message.getUsersList();
+                        this.usersModel.clear();
+                        this.userSelected.removeAllItems();
+                        this.userSelected.addItem("Todos");
+                        for(int i = 0; i < message.getUsersList().size(); i++){
                             //Users online
-                            this.usersModel.addElement(this.usersList.get(i));
+                            this.usersModel.addElement(message.getUsersList().get(i));
                             //Selected user
-                            this.userSelected.addItem(this.usersList.get(i));
+                            this.userSelected.addItem(message.getUsersList().get(i));
                         }
                         break;
                 }

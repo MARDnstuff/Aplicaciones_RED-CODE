@@ -120,12 +120,12 @@ public class ChatView extends javax.swing.JFrame {
         try{
             int pto= 1234,z=0;            
             //NetworkInterface ni = NetworkInterface.getByName("eth2");
-            NetworkInterface ni = NetworkInterface.getByIndex(1);
+            NetworkInterface ni = NetworkInterface.getByIndex(14);
             //br.close();
             System.out.println("\nElegiste "+ni.getDisplayName());
             m= new MulticastSocket(pto);
-            m.setReuseAddress(true);
-            m.setTimeToLive(255);
+            //m.setReuseAddress(true);
+            //m.setTimeToLive(255);
             String dir= "230.1.1.1";
             InetAddress gpo = InetAddress.getByName(dir);
             //InetAddress gpo = InetAddress.getByName("ff3e:40:2001::1");
@@ -136,7 +136,8 @@ public class ChatView extends javax.swing.JFrame {
                   e.printStackTrace();
                    return;
                 }//catch
-                m.joinGroup(dirm, ni);
+                m.joinGroup(gpo);
+                //m.joinGroup(dirm, ni);
                 Message message = new Message(1, this.nickName);
                 ByteArrayOutputStream baos= new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -148,7 +149,9 @@ public class ChatView extends javax.swing.JFrame {
                 String textInChat = this.chatPane.getText();
                 this.chatPane.setText("Bienvenido al grupo " + nickName + ". A partir de ahora puedes enviar mensajes.");
                 this.chatPane.setForeground(Color.blue);
-                Recibe r = new Recibe(m,this.nickName, chatPane, this.usersModel, userSelectedCBox);
+                
+                int[] usersIndexes = this.usersList.getSelectedIndices();
+                Recibe r = new Recibe(m,this.nickName, chatPane, this.usersModel, usersIndexes, userSelectedCBox);
                 r.start();
         }catch(Exception e){}
     }
