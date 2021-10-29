@@ -61,15 +61,12 @@ public class Server {
                 
                 //join message
                 if(message.getType() == 1){
-                    System.out.println("Se conectó un nuevo usuario");
-                    
                     //Adding the new user to the online user's list
                     usersList.add(message.getSender());
                     
                     //Creating a message with the list
                     Message usersOnline = new Message(4, usersList);
                     
-
                     for(int i = 0; i < usersList.size(); i++){
                         System.out.println("Usuario conectado: " + usersList.get(i)); 
                     }
@@ -83,8 +80,26 @@ public class Server {
                     DatagramPacket pktList = new DatagramPacket(b,b.length,gpo,pto);
                     s.send(pktList);
                 }
-                else if(message.getType() == 4){
-                    System.out.println("Se ha conectado " + message.getSender());
+                //Leave message
+                else if(message.getType() == 5){
+                    int i = 0;
+                    //Searching the index of the user
+                    while(!usersList.get(i).equals(message.getSender()) && i < usersList.size()){
+                        i++;
+                    }
+                    if(i != usersList.size()){
+                        usersList.remove(i);
+                    }
+                    //Creating a message with the list
+                    Message usersOnline = new Message(4, usersList);
+                    //Writting and sending the list to the clients
+                    ByteArrayOutputStream baos= new ByteArrayOutputStream();
+                    ObjectOutputStream oos = new ObjectOutputStream(baos);
+                    oos.writeObject(usersOnline);
+                    oos.flush();
+                    byte[] b = baos.toByteArray();
+                    DatagramPacket pktList = new DatagramPacket(b,b.length,gpo,pto);
+                    s.send(pktList);
                 }
             }
         }catch(Exception e){

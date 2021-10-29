@@ -20,6 +20,8 @@ public class Message implements Serializable{
     3 : private message
     4 : list of users
     5 : leave message
+    6 : Emoji for multicast
+    7 : Emoji for private
     */
     private int type;
     private String message;

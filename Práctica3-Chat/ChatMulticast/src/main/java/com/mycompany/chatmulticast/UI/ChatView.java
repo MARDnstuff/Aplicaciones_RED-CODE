@@ -23,6 +23,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import com.mycompany.chatmulticast.backend.Recibe;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.DefaultListModel;
@@ -36,7 +38,10 @@ public class ChatView extends javax.swing.JFrame {
     public JLabel[] emojisLabels;
     public ImageIcon[] emojisIcons;
     public MulticastSocket m;
+    int pto= 1234;
+    InetAddress gpo;
     public DefaultListModel usersModel;
+    String startMessage="", middleMessage="", endMessage="";
     
     /**
      * Creates new form ChatView
@@ -55,14 +60,41 @@ public class ChatView extends javax.swing.JFrame {
         this.usersList.setModel(usersModel);
         loadEmojis();
         connectToGroup();
+        File f = new File("");
+        String path = f.getAbsolutePath();
+        startMessage= "<head><base href=\"file:"+path+"\\\">"+
+                "<style>#usuarios {"+
+                  "font-family: Arial, Helvetica, sans-serif;"+
+                  "border-collapse: collapse;"+
+                  "width: 100%;"+
+                "} #usuarios td, #usuarios th {"+
+                  "border: 0px solid #ddd;"+
+                 " padding: 8px;"+
+                "}#usuarios tr:nth-child(even){background-color: #f2f2f2;}"+
+                "#usuarios tr:hover {background-color: #ddd;}"+
+                "#usuarios th {"+
+                 " padding-top: 12px;"+
+                  "padding-bottom: 12px;"+
+                  "text-align: left;"+
+                  "background-color: #04AA6D;"+
+                  "color: white;}"+
+                "</style>"+
+                "</head>"; 
+                //"<table id=\"usuarios\">\n";
+         /*   "  <tr>\n" +
+            "    <th>Usuario</th>\n" +
+            "    <th>Mensaje</th>\n" +
+            "  </tr>";*/
+       
+        endMessage = "</table>";
     }
     
     private void loadEmojis(){
         int xReference = 15, yReference = 80;
         int width=30;
         int height=30;
-        emojisIcons = new ImageIcon[40];
-        emojisLabels = new JLabel[40];
+        emojisIcons = new ImageIcon[28];
+        emojisLabels = new JLabel[28];
         File f = new File("");
         String path = f.getAbsolutePath();
         this.path=path;
@@ -77,6 +109,8 @@ public class ChatView extends javax.swing.JFrame {
             emojisIcons[i] = new ImageIcon(path+"\\src\\img\\emoji" + (i+1) + ".png");
             Icon emoji = new ImageIcon(emojisIcons[i].getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
             emojisLabels[i] = new JLabel(emoji);
+            //emojisLabels[i].setText(Integer.toString(i));
+            emojisLabels[i].setName(Integer.toString(i));
             //emojisLabels[i] = new JLabel("Hello");
             emojisLabels[i].setForeground(Color.green);
             //emojisLabels[i].setBounds(xReference+10, yReference-20, width, height);
@@ -112,13 +146,45 @@ public class ChatView extends javax.swing.JFrame {
                 
             
             }
+            emojisLabels[i].addMouseListener(new MouseAdapter(){
+                public void mouseClicked(MouseEvent me) {
+                    try{
+                        //BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
+                        
+                        String dir= "230.1.1.1";
+                        int pto=1234;
+                        InetAddress gpo = InetAddress.getByName(dir);
+                        JLabel nEmoji = (JLabel) me.getSource();
+                        String msg = nEmoji.getName();
+                        System.out.println("nEmoji: " + msg);
+                        String userSelected = (String) userSelectedCBox.getSelectedItem();
+                        Message message;
+                        //Message for everyone
+                        if(userSelected.equals("Todos")){
+                            message = new Message(6, msg, nickName);
+                        }
+                        //Private message
+                        else{
+                            message = new Message(7, msg, nickName, userSelected);
+                        }
+                        ByteArrayOutputStream baos= new ByteArrayOutputStream();
+                        ObjectOutputStream oos = new ObjectOutputStream(baos);
+                        oos.writeObject(message);
+                        oos.flush();
+                        byte[] b = baos.toByteArray();
+                        DatagramPacket pkt = new DatagramPacket(b,b.length,gpo,pto);
+                        m.send(pkt);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }//catch
+                }
+            });
             emojisPanel.add(emojisLabels[i]); 
         }
     }
     
     private void connectToGroup(){
-        try{
-            int pto= 1234,z=0;            
+        try{            
             //NetworkInterface ni = NetworkInterface.getByName("eth2");
             NetworkInterface ni = NetworkInterface.getByIndex(14);
             //br.close();
@@ -127,7 +193,7 @@ public class ChatView extends javax.swing.JFrame {
             //m.setReuseAddress(true);
             //m.setTimeToLive(255);
             String dir= "230.1.1.1";
-            InetAddress gpo = InetAddress.getByName(dir);
+            gpo = InetAddress.getByName(dir);
             //InetAddress gpo = InetAddress.getByName("ff3e:40:2001::1");
             SocketAddress dirm;
                 try{
@@ -147,12 +213,33 @@ public class ChatView extends javax.swing.JFrame {
                 DatagramPacket pkt = new DatagramPacket(b,b.length,gpo,pto);
                 m.send(pkt);
                 String textInChat = this.chatPane.getText();
-                this.chatPane.setText("Bienvenido al grupo " + nickName + ". A partir de ahora puedes enviar mensajes.");
-                this.chatPane.setForeground(Color.blue);
+                //this.chatPane.setText("Bienvenido al grupo " + nickName + ". A partir de ahora puedes enviar mensajes.");
+                //this.chatPane.setForeground(Color.blue);
                 
                 int[] usersIndexes = this.usersList.getSelectedIndices();
-                Recibe r = new Recibe(m,this.nickName, chatPane, this.usersModel, usersIndexes, userSelectedCBox);
+                Recibe r = new Recibe(
+                        m,this.nickName, 
+                        chatPane, 
+                        this.usersModel,
+                        usersIndexes, userSelectedCBox,
+                        startMessage,
+                        endMessage
+                );
                 r.start();
+        }catch(Exception e){}
+    }
+    private void leaveGroup(){
+        try{
+            Message message = new Message(5, this.nickName);
+            ByteArrayOutputStream baos= new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(message);
+            oos.flush();
+            byte[] b = baos.toByteArray();
+            DatagramPacket pkt = new DatagramPacket(b,b.length,gpo,pto);
+            m.send(pkt);
+            m.leaveGroup(gpo);
+            System.exit(0);
         }catch(Exception e){}
     }
     
@@ -181,8 +268,17 @@ public class ChatView extends javax.swing.JFrame {
             DatagramPacket pkt = new DatagramPacket(b,b.length,gpo,pto);
             m.send(pkt);
             String textInChat = this.chatPane.getText();
-            this.chatPane.setText(textInChat+ "\n\n\n[" + message.getSender() + "] :       " + message.getMessage());
-            this.chatPane.setForeground(Color.blue);
+            
+            /*middleMessage= middleMessage+"  <tr>\n" +
+            "    <td>" + "[ " + message.getSender() + " ] :            </td>\n" +
+            "    <td>" + message.getMessage() +"</td>\n" +
+            "  </tr>";
+            this.chatPane.setText(startMessage+middleMessage+endMessage);
+
+            this.repaint();
+            
+            //this.chatPane.setText(textInChat+ "\n\n\n[" + message.getSender() + "] :       " + message.getMessage());
+            this.chatPane.setForeground(Color.blue);*/
             messagePanel.setText("");
         }catch(Exception e){
             e.printStackTrace();
@@ -269,6 +365,11 @@ public class ChatView extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 102, 204), null));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+        });
 
         jLabel5.setForeground(new java.awt.Color(0, 51, 255));
         jLabel5.setText("Salir");
@@ -385,6 +486,8 @@ public class ChatView extends javax.swing.JFrame {
         background.add(emojisPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 0, 180, 370));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        chatPane.setContentType("text/html"); // NOI18N
         jScrollPane1.setViewportView(chatPane);
 
         background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 490, 370));
@@ -420,6 +523,10 @@ public class ChatView extends javax.swing.JFrame {
             sendMessage();
         }
     }//GEN-LAST:event_sendMessageBtnMouseClicked
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        leaveGroup();
+    }//GEN-LAST:event_jPanel1MouseClicked
 
     /**
      * @param args the command line arguments
