@@ -124,7 +124,7 @@ public class Recibe extends Thread{
                             "    <td>" + message.getMessage() +"</td>\n" +
                             "  </tr>";
                             this.chatPane.setText(startMessage+middleMessage+endMessage);*/
-                            this.middleMessage = this.middleMessage + "<p style='color:blue'> [" + message.getSender() + "] :     " + message.getMessage() + "</p>\n";
+                            this.middleMessage = this.middleMessage + "<p style='color:blue'> [Privado] [" + message.getSender() + "] :     " + message.getMessage() + "</p>\n";
                             this.chatPane.setText(startMessage+middleMessage);
                             //this.chatPane.setText(textInChat+ "\n\n\n[" + message.getSender() + "]        " + message.getMessage());
                         }
@@ -134,7 +134,7 @@ public class Recibe extends Thread{
                             "    <td>" + message.getMessage() +"</td>\n" +
                             "  </tr>";
                             this.chatPane.setText(startMessage+middleMessage+endMessage);*/
-                            this.middleMessage = this.middleMessage + "<p style='color:#00e676'> [Tú] :    "  + message.getMessage() + "</p>\n";
+                            this.middleMessage = this.middleMessage + "<p style='color:#00e676'> [Privado] [Tú] [" + message.getAddressee() + "] :    "  + message.getMessage() + "</p>\n";
                             this.chatPane.setText(startMessage+middleMessage);
                             //this.chatPane.setText(textInChat+ "\n\n\n[" + message.getSender() + "]        " + message.getMessage());
                         }
@@ -169,7 +169,7 @@ public class Recibe extends Thread{
                             //this.chatPane.setForeground(Color.BLUE);
                         }
                         break;
-                    
+                    //Emoji multicast
                     case 6:
                         int nEmoji = Integer.parseInt(message.getMessage());
                         String path = this.path + (nEmoji+1) + ".png";
@@ -186,6 +186,7 @@ public class Recibe extends Thread{
                             this.chatPane.setText(startMessage+middleMessage);
                         }
                         break;
+                    //Emoji private
                     case 7:
                         int nEmoji1 = Integer.parseInt(message.getMessage());
                         String path1 = this.path + (nEmoji1+1) + ".png";
@@ -193,12 +194,12 @@ public class Recibe extends Thread{
                         URL emojiURL1 = emojiFile1.toURL();
                         System.out.println("Emoji Path: " + path1);
                         if(this.nickName.equals(message.getAddressee())){
-                            this.middleMessage = this.middleMessage + "<p style='color:#00e676'> [" + message.getSender() + "]  :              "+ "</p><br>\n" + "<img src=\'"+emojiURL1+"\'width=\'50\' height=\'50\'></img>\n";
+                            this.middleMessage = this.middleMessage + "<p style='color:#00e676'> [Privado] [" + message.getSender() + "]  :              "+ "</p><br>\n" + "<img src=\'"+emojiURL1+"\'width=\'50\' height=\'50\'></img>\n";
                             this.chatPane.setText(startMessage+middleMessage);
  
                         }
                         else if(this.nickName.equals(message.getSender())){
-                            this.middleMessage = this.middleMessage + "<p style='color:blue'> [Tú]:         "+ "</p><br>\n" + "<img src=\'"+emojiURL1+"\'width=\'50\' height=\'50\'></img>\n";
+                            this.middleMessage = this.middleMessage + "<p style='color:blue'> [Privado] [Tú] [" + message.getAddressee() + "] :    "+ "</p><br>\n" + "<img src=\'"+emojiURL1+"\'width=\'50\' height=\'50\'></img>\n";
                             this.chatPane.setText(startMessage+middleMessage);
                         }
                         break;
