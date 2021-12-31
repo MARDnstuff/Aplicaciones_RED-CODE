@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Main {
     static LinkManage downloadFilesList = new LinkManage();
-    static final int MAX_T = 5; 
+    static final int MAX_T = 10; 
     
     
     public static void main(String[] args) {

@@ -24,7 +24,7 @@ import java.net.URL;
 public class FileManage extends Thread {
     private LinkManage downloadFilesList;
     private URL url;
-    static String path = "C:\\Users\\Mauricio\\Documents\\ESCOM\\5semestre\\RedesII\\Prácticas\\Aplicaciones_RED-CODE\\Práctica5-WebDownloader\\";
+    static String path = "C:\\Users\\Mauricio\\Documents\\ESCOM\\5semestre\\RedesII\\Prácticas\\";
     
     public FileManage(URL url, LinkManage downloadFilesList){
         this.url = url;
@@ -45,6 +45,7 @@ public class FileManage extends Thread {
         
         String line;
         String name;
+        String fileName;
         String newLink;
         String auxNewLink;
         String newName;
@@ -54,60 +55,44 @@ public class FileManage extends Thread {
         try{
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            name = conn.getURL().getHost() + conn.getURL().getFile();
-            
+            fileName = conn.getURL().getFile();
+            name = conn.getURL().getHost() + fileName;
             if(conn.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN || conn.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND)
                 return;
             
             
+            
             if(!downloadFilesList.exists(name)){
-                //Algorithm to know if the root path is a file or a 
-                System.out.println("Downloading: " + name);
-                newName = name.replace(".doc", "");
-                newName = newName.replace(".docx", "");
-                newName = newName.replace(".txt", "");
-                newName = newName.replace(".gz", "");
-                newName = newName.replace(".tar", "");
-                newName = newName.replace(".tgz", "");
-                newName = newName.replace(".c", "");
-                newName = newName.replace(".java", "");
-                newName = newName.replace(".pptx", "");
-                newName = newName.replace(".gif", "");
-                newName = newName.replace(".png", "");
-                newName = newName.replace(".pdf", "");
-                newName = newName.replace(".jpg", "");
-                newName = newName.replace(".css", "");
-                newName = newName.replace(".zip", "");
-                newName = newName.replace(".mht", "");
-                newName = newName.replace(".html", "");
-                newName = newName.replace(".ico", "");
-                newName = newName.replace(".x", "");
-                newName = newName.replace(".swf", "");
-                newName = newName.replace(".ppt", "");
-                newName = newName.replace(".form", "");
-                newName = newName.replace(".jar", "");
                 
-                //File
-                if(!newName.equals(name)){
-                    newName = newName.substring(0, newName.lastIndexOf("/"));
-                    
+                newName = name;
+                //Algorithm to know if the root path is a file or a 
+                //System.out.println("Downloading: " + name);
+                
+                //File - Creating a folder for a File
+                if(fileName.contains(".")){
+                    System.out.println("Downloading the file: "+ newName);
+                    newName = name.substring(0, name.lastIndexOf("/"));
                     File f = new File(path + newName);
                     f.mkdirs();
                     f.setWritable(true);
+                }
                 //Folder
-                } else {
+                else{
+                    System.out.println("Downloading the folder: " + name);
                     File f = new File(path + name);
                     f.mkdirs();
                     f.setWritable(true);
                 }
-                                
+                                 
                 if(conn.getContentType().contains("text/html")){                    
                     
+                    //Folder
                     if(!name.contains(".html")){
-                        if(name.endsWith("/")){
+                        /*if(name.endsWith("/")){
                             name = name.substring(0, name.length() - 1);
-                        }
-                        name = name + ".html";
+                        }*/
+                        name = name + "index.html";
+                        //System.out.println("Folder in html: " + name);
                     }
                     
                     BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -159,7 +144,7 @@ public class FileManage extends Thread {
                                 } else {
                                     newLink = url.getProtocol() + "://" + url.getHost() + url.getFile() + newLink;
                                 }
-                                System.out.println(newLink);
+                                //System.out.println(newLink);
                                 
                                 download(new URL(newLink));
                             }

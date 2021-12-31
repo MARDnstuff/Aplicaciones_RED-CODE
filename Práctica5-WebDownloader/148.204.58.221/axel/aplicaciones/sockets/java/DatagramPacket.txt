@@ -1,0 +1,145 @@
+To simplify the creation of a DatagramPacket from a String and vice-versa, the example begins with a utility class, Dgram, to do the work for you: 
+
+//: Dgram.java
+// A utility class to convert back and forth
+// Between Strings and DataGramPackets.
+import java.net.*;
+
+public class Dgram {
+  public static DatagramPacket toDatagram(
+    String s, InetAddress destIA, int destPort) {
+    // Deprecated in Java 1.1, but it works:
+    byte[] buf = new byte[s.length() + 1];
+    s.getBytes(0, s.length(), buf, 0);
+    // The correct Java 1.1 approach, but it's
+    // Broken (it truncates the String):
+    // byte[] buf = s.getBytes();
+    return new DatagramPacket(buf, buf.length, 
+      destIA, destPort);
+  }
+  public static String toString(DatagramPacket p){
+    // The Java 1.0 approach:
+    // return new String(p.getData(), 
+    //  0, 0, p.getLength());
+    // The Java 1.1 approach:
+    return 
+      new String(p.getData(), 0, p.getLength());
+  }
+} ///:~ 
+
+
+Here is the server for the datagram demonstration: 
+
+//: ChatterServer.java
+// A server that echoes datagrams
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
+public class ChatterServer {
+  static final int INPORT = 1711;
+  private byte[] buf = new byte[1000];
+  private DatagramPacket dp = 
+    new DatagramPacket(buf, buf.length);
+  // Can listen & send on the same socket:
+  private DatagramSocket socket;
+
+  public ChatterServer() {
+    try {
+      socket = new DatagramSocket(INPORT);
+      System.out.println("Server started");
+      while(true) {
+        // Block until a datagram appears:
+        socket.receive(dp);
+        String rcvd = Dgram.toString(dp) +
+          ", from address: " + dp.getAddress() +
+          ", port: " + dp.getPort();
+        System.out.println(rcvd);
+        String echoString = 
+          "Echoed: " + rcvd;
+        // Extract the address and port from the
+        // received datagram to find out where to
+        // send it back:
+        DatagramPacket echo = 
+          Dgram.toDatagram(echoString,
+            dp.getAddress(), dp.getPort());
+        socket.send(echo);
+      }
+    } catch(SocketException e) {
+      System.err.println("Can't open socket");
+      System.exit(1);
+    } catch(IOException e) {
+      System.err.println("Communication error");
+      e.printStackTrace();
+    }
+  }
+  public static void main(String[] args) {
+    new ChatterServer();
+  }
+} ///:~ 
+
+
+To test this server, here’s a program that makes a number of clients, all of which fire datagram packets to the server and wait for the server to echo them back. 
+
+//: ChatterClient.java
+// Tests the ChatterServer by starting multiple 
+// clients, each of which sends datagrams.
+import java.lang.Thread;
+import java.net.*;
+import java.io.*;
+
+public class ChatterClient extends Thread {
+  // Can listen & send on the same socket:
+  private DatagramSocket s;
+  private InetAddress hostAddress;
+  private byte[] buf = new byte[1000];
+  private DatagramPacket dp = 
+    new DatagramPacket(buf, buf.length);
+  private int id;
+
+  public ChatterClient(int identifier) {
+    id = identifier;
+    try {
+      // Auto-assign port number:
+      s = new DatagramSocket();
+      hostAddress = 
+        InetAddress.getByName("localhost");
+    } catch(UnknownHostException e) {
+      System.err.println("Cannot find host");
+      System.exit(1);
+    } catch(SocketException e) {
+      System.err.println("Can't open socket");
+      e.printStackTrace();
+      System.exit(1);
+    } 
+    System.out.println("ChatterClient starting");
+  }
+  public void run() {
+    try {
+      for(int i = 0; i < 25; i++) {
+        String outMessage = "Client #" +
+          id + ", message #" + i;
+        // Make and send a datagram:
+        s.send(Dgram.toDatagram(outMessage,
+          hostAddress, 
+          ChatterServer.INPORT));
+        // Block until it echoes back:
+        s.receive(dp);
+        // Print out the echoed contents:
+        String rcvd = "Client #" + id +
+          ", rcvd from " + 
+          dp.getAddress() + ", " + 
+          dp.getPort() + ": " +
+          Dgram.toString(dp);
+        System.out.println(rcvd);
+      }
+    } catch(IOException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+  public static void main(String[] args) {
+    for(int i = 0; i < 10; i++)
+      new ChatterClient(i).start();
+  }
+} ///:~ 
